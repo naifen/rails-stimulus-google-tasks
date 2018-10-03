@@ -9,10 +9,16 @@
 
 import { Controller } from "stimulus"
 
-export default class extends Controller {
-  static targets = [ "output" ]
+class HelloController extends Controller {
+  private outputTarget: Element;
+  private hasOutputTarget: boolean;
 
-  connect() {
-    this.outputTarget.textContent = 'Hello, Stimulus!'
+  static targets = [ "output" ]
+  static framework: string = "Stimulus";
+
+  connect(): void {
+    this.outputTarget.textContent = `Hello, ${HelloController.framework}! From TypeScript`
   }
 }
+
+export default HelloController;
