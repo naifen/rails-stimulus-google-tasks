@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier"
+  ],
+  "jsRules": {},
+  "rules": {
+    "member-access": [true, "no-public"],
+    "prettier": true
+  },
+  "rulesDirectory": ["tslint-plugin-prettier"]
+}

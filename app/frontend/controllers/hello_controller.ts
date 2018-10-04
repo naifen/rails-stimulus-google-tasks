@@ -7,17 +7,21 @@
 //   <h1 data-target="hello.output"></h1>
 // </div>
 
-import { Controller } from "stimulus"
+import { Controller } from "stimulus";
 
 class HelloController extends Controller {
+  static targets = ["output"];
+
   private outputTarget: Element;
   private hasOutputTarget: boolean;
+  private framework: string = "Stimulus";
 
-  static targets = [ "output" ]
-  static framework: string = "Stimulus";
-
-  connect(): void {
-    this.outputTarget.textContent = `Hello, ${HelloController.framework}! From TypeScript`
+  connect() {
+    if (this.hasOutputTarget) {
+      this.outputTarget.textContent = `Hello, ${
+        this.framework
+      }! From TypeScript`;
+    }
   }
 }
 
