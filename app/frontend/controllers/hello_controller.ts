@@ -22,6 +22,14 @@ class HelloController extends Controller {
         this.framework
       }! From TypeScript`;
     }
+
+    window.addEventListener("keydown", this.keyDownListener, false);
+  }
+
+  private keyDownListener(e: KeyboardEvent): any {
+    if (e.keyCode === 80 && e.metaKey && e.shiftKey) {
+      alert("Omni Command cmd + shift + P");
+    }
   }
 }
 

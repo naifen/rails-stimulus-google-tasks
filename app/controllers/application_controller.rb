@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "turbolinks/redirection"
 
 class ApplicationController < ActionController::Base
