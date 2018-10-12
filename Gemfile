@@ -28,18 +28,31 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'turbolinks', '~> 5.2.0', require: false
 
+gem 'authlogic', '~> 3.4', '>= 3.4.6'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
+  gem 'bullet'
   # Call 'byebug' anywhere in the code to stop execution for a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 3.8'
   gem 'rubocop', require: false # SyntasticCheck rubocop or Vim RuboCop plugin
+end
+
+group :test do
+  gem 'database_cleaner'
+  gem 'capybara'
+  gem 'faker'
+  gem 'shoulda-matchers', '4.0.0.rc1'
 end
 
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'guard-rspec', require: false
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'meta_request' # for Chrome RailsPanel extension
   gem 'pry-rails'
