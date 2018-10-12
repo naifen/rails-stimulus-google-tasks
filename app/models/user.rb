@@ -34,6 +34,30 @@ class User < ApplicationRecord
       if: :username_changed?
     }
 
+  validates :email,
+    format: {
+      with: ALLOW_EMAIL_FORMAT_REGEXP,
+      message: "should have vaild email format."
+    },
+    length: { maximum: 100 },
+    uniqueness: {
+      case_sensitive: false,
+      if: :email_changed?
+    },
+    allow_blank: true
+
+  validates :phone_number,
+    format: {
+      with: ALLOW_PHONE_FORMAT_REGEXP,
+      message: "should have vaild phone number."
+    },
+    length: { maximum: 20 },
+    uniqueness: {
+      case_sensitive: false,
+      if: :phone_number_changed?
+    },
+    allow_blank: true
+
   validates :password,
     confirmation: { if: :require_password? },
     length: {
@@ -54,6 +78,7 @@ class User < ApplicationRecord
   after_create :approve_user!
   after_create :confirm_user!
 
+  # used in UserSession find_by_login_method
   def self.find_by_username_email_or_phone(login)
     find_by_username(login) || find_by_email(login) || find_by_phone_number(login)
   end

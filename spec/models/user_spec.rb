@@ -38,6 +38,44 @@ RSpec.describe User, type: :model do
         expect(user_dup.valid?).to be_falsey
       end
     end
+
+    context 'email' do
+      it 'should have valid format' do
+        expect(build(:user, email: 'foo@bar').valid?).to be_falsey
+      end
+
+      it 'should be less than 100 characters' do
+        expect(build(:user, email: "foo@b#{'a' * 100}r.com").valid?).to be_falsey
+      end
+
+      it 'can be blank' do
+        expect(build(:user, email: '').valid?).to be_truthy
+      end
+
+      describe "uniqueness" do
+        subject { build(:rand_user, email: user.email) }
+        it { should validate_uniqueness_of(:email).case_insensitive }
+      end
+    end
+
+    context 'phone_number' do
+      it 'should have valid format' do
+        expect(build(:user, phone_number: 'abcdefg').valid?).to be_falsey
+      end
+
+      it 'should be less than 100 characters' do
+        expect(build(:user, phone_number: '1' * 21).valid?).to be_falsey
+      end
+
+      it 'can be blank' do
+        expect(build(:user, phone_number: '').valid?).to be_truthy
+      end
+
+      describe "uniqueness" do
+        subject { build(:rand_user, phone_number: user.phone_number) }
+        it { should validate_uniqueness_of(:phone_number).case_insensitive }
+      end
+    end
   end
 
   describe "after user saved" do
