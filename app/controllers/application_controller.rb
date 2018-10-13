@@ -41,6 +41,10 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    def ensure_not_already_login
+      redirect_back(fallback_location: root_path) if current_user
+    end
+
     def store_location
       session[:forwarding_url] = request.original_url if request.get?
     end

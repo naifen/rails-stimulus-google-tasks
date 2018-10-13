@@ -1,0 +1,84 @@
+<div id="login">
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <div class="box" id="login-form">
+        <%= form_with scope: :signup, url: create_signup_path do |f| %>
+          <div class="field">
+            <p class="control has-icons-left has-icons-right">
+              <%= f.text_field :email,
+                class: "input is-medium",
+                id: "signup-form-email",
+                placeholder: "Email" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <span class="icon is-small is-right">
+                <i class="fas fa-check"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="control has-icons-left has-icons-right">
+              <%= f.text_field :username,
+                class: "input is-medium",
+                id: "signup-form-username",
+                placeholder: "Username" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <span class="icon is-small is-right">
+                <i class="fas fa-check"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="control has-icons-left has-icons-right">
+              <%= f.text_field :phone_number,
+                class: "input is-medium",
+                id: "signup-form-phone",
+                placeholder: "Phone Number" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <span class="icon is-small is-right">
+                <i class="fas fa-check"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="control has-icons-left">
+              <%= f.password_field :password,
+                class: "input is-medium",
+                id: "sigup-form-password",
+                placeholder: "Password" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="control has-icons-left">
+              <%= f.password_field :password_confirmation,
+                class: "input is-medium",
+                id: "sigup-form-password-conf",
+                placeholder: "Password Confirmation" %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="control">
+              <%= f.submit "Sign up", class: "button is-primary is-rounded is-medium is-fullwidth" %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

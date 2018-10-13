@@ -7,8 +7,10 @@ Rails.application.routes.draw do
 
   resources :user_sessions, only: [:new, :create, :destroy]
 
-  delete '/logout', to: 'user_sessions#destroy', as: :logout
   get '/login', to: 'user_sessions#new', as: :login
+  delete '/logout', to: 'user_sessions#destroy', as: :logout
+  get '/signup', to: 'registration#new', as: :signup
+  post '/signup', to: 'registration#create', as: :create_signup
 
   get '/about', to: 'pages#about'
 end

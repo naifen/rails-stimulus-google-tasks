@@ -1,4 +1,4 @@
-<div class="login">
+<div id="login">
   <div class="columns is-centered">
     <div class="column is-half">
       <div class="box" id="login-form">
@@ -45,6 +45,19 @@
             </p>
           </div>
         <% end %>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half">
+          <div class="content has-text-centered">
+            <%= link_to "Create a new account", signup_path %>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="content has-text-centered">
+            <%= link_to "Forgot your password?", signup_path %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
