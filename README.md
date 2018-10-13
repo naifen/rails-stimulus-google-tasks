@@ -117,6 +117,15 @@ install``
   end
   ```
 
+  create a ``spec/features`` dir for capybara specs, eg:
+  ```
+  RSpec.feature "User authentication", :type => :feature do
+    scenario "User tries to login" do
+      ...
+    end
+  end
+  ```
+
   remember to setup proper ``.rspec`` and ``Guardfile``
 
   Finally, run ``bundle exec guard``

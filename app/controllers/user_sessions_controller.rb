@@ -5,8 +5,8 @@ class UserSessionsController < ApplicationController
     @user_session = UserSession.new
   end
 
+  # TODO: return errors if not successfully login
   def create
-    # byebug
     @user_session = UserSession.new(user_session_params.to_h)
     if @user_session.save
       redirect_back_or root_path

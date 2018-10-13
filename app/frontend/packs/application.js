@@ -12,6 +12,7 @@ import Rails from 'rails-ujs';
 import Turbolinks from 'turbolinks';
 import { Application } from "stimulus";
 import { definitionsFromContext } from "stimulus/webpack-helpers";
+import 'bulma/css/bulma.css'
 import "./application.css";
 
 ActiveStorage.start();

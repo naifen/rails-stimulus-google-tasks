@@ -5,7 +5,7 @@ RSpec.describe User, type: :model do
   let(:username_invalid_regex) { build(:user, username: Faker::Name.unique.name) }
   let(:username_too_short) { build(:user, username: 'a') }
   let(:username_too_long) { build(:user, username: 'a' * 51) }
-  let(:email_phone_blank) { build(:user, email: '', phone_number: '') }
+  let(:email_phone_blank) { build(:user, email: nil, phone_number: nil) }
 
   describe 'validations' do
     context 'custom validator' do
@@ -49,7 +49,7 @@ RSpec.describe User, type: :model do
       end
 
       it 'can be blank' do
-        expect(build(:user, email: '').valid?).to be_truthy
+        expect(build(:user, email: nil).valid?).to be_truthy
       end
 
       describe "uniqueness" do
@@ -68,7 +68,7 @@ RSpec.describe User, type: :model do
       end
 
       it 'can be blank' do
-        expect(build(:user, phone_number: '').valid?).to be_truthy
+        expect(build(:user, phone_number: nil).valid?).to be_truthy
       end
 
       describe "uniqueness" do

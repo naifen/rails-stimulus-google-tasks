@@ -7,8 +7,8 @@ Rails.application.routes.draw do
 
   resources :user_sessions, only: [:new, :create, :destroy]
 
-  delete '/sign_out', to: 'user_sessions#destroy', as: :sign_out
-  get '/sign_in', to: 'user_sessions#new', as: :sign_in
+  delete '/logout', to: 'user_sessions#destroy', as: :logout
+  get '/login', to: 'user_sessions#new', as: :login
 
   get '/about', to: 'pages#about'
 end
