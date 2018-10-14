@@ -4,17 +4,22 @@ class RegistrationController < ApplicationController
   def new
   end
 
+  # TODO: better views and error msgs
   def create
+    # TODO: make sure email/phone is nil if blank
     @user = User.new(signup_params)
 
-    # TODO: login user after signup
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
+        # login user after signup
+        # TODO show notice in layout
+        if UserSession.create @user
+          format.html { redirect_to root_path, notice: 'Successfully registered.' }
+        end
+        # format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        # format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end

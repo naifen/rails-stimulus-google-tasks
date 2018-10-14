@@ -74,9 +74,9 @@ class User < ApplicationRecord
   # custom validator
   validate :ensure_email_or_phone
 
-  after_create :activate_user!
-  after_create :approve_user!
-  after_create :confirm_user!
+  before_create :activate_user!
+  before_create :approve_user!
+  before_create :confirm_user!
 
   # used in UserSession find_by_login_method
   def self.find_by_username_email_or_phone(login)

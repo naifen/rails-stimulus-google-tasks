@@ -41,7 +41,9 @@
           </div>
           <div class="field">
             <p class="control">
-              <%= f.submit "Log in", class: "button is-primary is-rounded is-medium is-fullwidth" %>
+              <%= f.submit "Log in",
+                class: "button is-primary is-rounded is-medium is-fullwidth",
+                data: { disable_with: "Loading ..." } %>
             </p>
           </div>
         <% end %>

@@ -6,6 +6,7 @@ class UserSessionsController < ApplicationController
   end
 
   # TODO: return errors if not successfully login
+  # TODO: remember me
   def create
     @user_session = UserSession.new(user_session_params.to_h)
     if @user_session.save
