@@ -6,7 +6,7 @@ class RegistrationController < ApplicationController
   def new
   end
 
-  # TODO: error msgs from ajax
+  # TODO: error msgs from ajax, instead of redirect
   # TODO: make sure email/phone is nil if blank w/ Stimulus(hide or show)
   # like twitter signup
   # TODO show check/cross icon for input field(eg, username taken, etc)
