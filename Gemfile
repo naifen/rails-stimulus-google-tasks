@@ -55,6 +55,7 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'meta_request' # for Chrome RailsPanel extension
+  gem 'pry-byebug'
   gem 'pry-rails'
   # Spring keeps your application running in the background.
   gem 'spring' # Read more: https://github.com/rails/spring

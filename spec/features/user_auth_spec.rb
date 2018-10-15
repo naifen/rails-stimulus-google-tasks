@@ -12,6 +12,7 @@ RSpec.feature "User authentication", :type => :feature do
     within("#login-form") do
       fill_in "login-form-username", :with => user.username
       fill_in "login-form-password", :with => user.password
+      check   "login-form-remember"
       click_button "Log in"
     end
 

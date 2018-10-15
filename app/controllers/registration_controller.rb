@@ -4,7 +4,7 @@ class RegistrationController < ApplicationController
   def new
   end
 
-  # TODO: better views and error msgs
+  # TODO: better form icons and error msgs
   def create
     # TODO: make sure email/phone is nil if blank
     @user = User.new(signup_params)
