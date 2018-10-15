@@ -138,3 +138,6 @@ install``
 - Deployment instructions
 
 - Roadmap
+
+- Issues
+Development: byebug no echo in foreman with pry <https://github.com/pry/pry/issues/1290#issuecomment-314532050>

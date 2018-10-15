@@ -19,6 +19,7 @@ RSpec.feature "User authentication", :type => :feature do
     expect(page).not_to have_selector("a", :text => "Sign up")
     expect(page).to have_selector("a", :text => "Log out")
     expect(page).to have_selector("h1", :text => "Pages#home")
+    expect(page).to have_selector(".is-info", :text => "Login successfully!")
 
     click_link "Log out"
   end
@@ -39,7 +40,9 @@ RSpec.feature "User authentication", :type => :feature do
     expect(page).not_to have_selector("a", :text => "Sign up")
     expect(page).to have_selector("a", :text => "Log out")
     expect(page).to have_selector("h1", :text => "Pages#home")
+    expect(page).to have_selector(".is-info", :text => "Sign up successfully!")
 
     click_link "Log out"
+    expect(page).to have_selector(".is-info", :text => "Log out successfully, see you soon!")
   end
 end

@@ -1,25 +1,35 @@
+# frozen_string_literal: true
+#
 class RegistrationController < ApplicationController
   before_action :ensure_not_already_login
 
   def new
   end
 
-  # TODO: better form icons and error msgs
+  # TODO: error msgs from ajax
+  # TODO: make sure email/phone is nil if blank w/ Stimulus(hide or show)
+  # like twitter signup
+  # TODO show check/cross icon for input field(eg, username taken, etc)
   def create
-    # TODO: make sure email/phone is nil if blank
     @user = User.new(signup_params)
 
     respond_to do |format|
       if @user.save
         # login user after signup
-        # TODO show notice in layout
+        # TODO stimulus close notification
         if UserSession.create @user
-          format.html { redirect_to root_path, notice: 'Successfully registered.' }
+          format.html { redirect_to root_path, notice: 'Sign up successfully!' }
+        else
+          format.html {
+            redirect_to signup_path,
+            alert: "A problem's occured while signing up, please try again."
+          }
         end
-        # format.json { render :show, status: :created, location: @user }
       else
-        format.html { render :new }
-        # format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.html {
+          redirect_to signup_path,
+          alert: "A problem's occured while signing up, please try again."
+        }
       end
     end
   end

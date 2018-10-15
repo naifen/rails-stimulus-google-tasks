@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  # TODO enable remember me in login
   acts_as_authentic do |c|
     c.validate_email_field = false
     c.validate_login_field = false

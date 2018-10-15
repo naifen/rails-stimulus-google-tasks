@@ -1,3 +1,14 @@
 html, body {
   background: lightyellow;
 }
+
+.notification-top-right {
+  position: fixed;
+  display: flex;
+  top: 24px;
+  right: 24px;
+  width: 288px;
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
