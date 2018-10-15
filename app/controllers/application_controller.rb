@@ -5,8 +5,8 @@ require "turbolinks/redirection"
 class ApplicationController < ActionController::Base
   include Turbolinks::Redirection # add this line b/c turbolinks require: false
 
-  helper_method :current_user_session, :current_user
-
+  # authlogic needs this CSRF protection patch, more details:
+  # https://github.com/binarylogic/authlogic#2d-csrf-protection
   protected
 
     def handle_unverified_request
@@ -16,33 +16,24 @@ class ApplicationController < ActionController::Base
       if current_user_session
         current_user_session.destroy
       end
-      redirect_to root_path
+      redirect_to root_path, error: 'An error has occured, please try again.'
     end
 
-  # TODO refactor to helpers
   private
-
-    def current_user_session
-      return @current_user_session if defined?(@current_user_session)
-      @current_user_session = UserSession.find
-    end
-
-    def current_user
-      return @current_user if defined?(@current_user)
-      @current_user = current_user_session && current_user_session.user
-    end
 
     def authenticate_user!
       unless current_user
         store_location
-        # flash[:notice] = "You must be logged in to access this page"
-        redirect_to login_path
+        redirect_to login_path, alert: "Please log in to access this page."
         return false
       end
     end
 
     def ensure_not_already_login
-      redirect_back(fallback_location: root_path) if current_user
+      if helpers.current_user
+        redirect_back fallback_location: root_path, alert: "Already logged in."
+        return false
+      end
     end
 
     def store_location

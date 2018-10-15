@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
 class UserSessionsController < ApplicationController
+  before_action :ensure_not_already_login, only: [:new, :create]
+
   def new
     @user_session = UserSession.new
   end
 
-  # TODO: error msgs from ajax, instead of redirect
+  # TODO: error msgs from ajax, instead of redirect, could be this:
+  # <h2><%= pluralize(@user_session.errors.count, "error") %> prohibited:</h2>
+  # <ul>
+    # <% @user_session.errors.full_messages.each do |msg| %>
+      # <li><%= msg %></li>
+    # <% end %>
+  # </ul>
   def create
     @user_session = UserSession.new(user_session_params.to_h)
     if @user_session.save
@@ -19,7 +27,7 @@ class UserSessionsController < ApplicationController
   end
 
   def destroy
-    if current_user_session.destroy
+    if helpers.current_user_session.destroy
       redirect_to root_path, notice: "Log out successfully, see you soon!"
     end
   end
