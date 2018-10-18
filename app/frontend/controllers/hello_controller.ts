@@ -34,3 +34,10 @@ class HelloController extends Controller {
 }
 
 export default HelloController;
+
+// register a eventHandler for rails ujs (e,g, form_with ajax form submission)
+// document.addEventListener('ajax:success', function(event) {
+//  var detail = event.detail;
+//  var data = detail[0], status = detail[1], xhr = detail[2];
+// })
+// https://guides.rubyonrails.org/working_with_javascript_in_rails.html#rails-ujs-event-handlers
