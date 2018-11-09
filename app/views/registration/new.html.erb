@@ -1,14 +1,98 @@
-<div id="signup">
+<div id="signup" data-controller="registration">
   <div class="columns is-centered">
     <div class="column is-half">
-      <div class="box" id="signup-form">
-        <%= form_with scope: :signup, url: create_signup_path do |f| %>
+      <div class="box">
+        <%= form_with scope: :step1, url: "/signup/check-availability",
+          method: :get, id: "step1-form" do |f| %>
+          <div class="field">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.text_field :username,
+                class: "input is-medium is-success",
+                id: "step1-form-username",
+                placeholder: "Username",
+                data: { target: "registration.step1username" } %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+              <span class="icon is-small is-right has-text-success">
+                <i class="fas fa-check"></i>
+              </span>
+              <p class="help is-success"></p>
+            </div>
+          </div>
+
+          <div class="field" id="step1-form-email-filed">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.text_field :email,
+                class: "input is-medium is-danger",
+                id: "step1-form-email",
+                placeholder: "Email",
+                data: { target: "registration.step1email" } %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <span class="icon is-small is-right has-text-danger">
+                <i class="fas fa-times"></i>
+              </span>
+              <p class="help is-danger">This email is invalid</p>
+            </div>
+          </div>
+
+          <div class="field is-hidden" id="step1-form-phone-filed">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.text_field :phone,
+                class: "input is-medium is-danger",
+                id: "step1-form-phone",
+                placeholder: "Phone number",
+                data: { target: "registration.step1phone" } %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-phone"></i>
+              </span>
+              <span class="icon is-small is-right has-text-danger">
+                <i class="fas fa-times"></i>
+              </span>
+              <p class="help is-danger">This phone is invalid</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <p class="control">
+              <%= f.button "Next",
+                class: "button is-primary is-rounded is-fullwidth",
+                data: { disable_with: "Loading ...",
+                action: "registration#step1Submit" } do %>
+                <span>Next</span>
+                <span class="icon is-small">
+                  <i class="fas fa-angle-double-right"></i>
+                </span>
+              <% end %>
+            </p>
+          </div>
+        <% end %>
+
+        <br />
+        <p class="has-text-centered">
+          <a data-action="registration#switchSignupMethod"
+            data-target="registration.method">
+            Use phone instead
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <div class="box">
+        <%= form_with scope: :signup, url: create_signup_path,
+          id: "signup-form" do |f| %>
           <div class="field">
             <p class="control has-icons-left has-icons-right">
               <%= f.text_field :username,
                 class: "input is-medium is-success",
                 id: "signup-form-username",
-                placeholder: "Username" %>
+                placeholder: "Username",
+                data: { target: "registration.username" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-user"></i>
               </span>
@@ -23,7 +107,8 @@
               <%= f.text_field :email,
                 class: "input is-medium is-danger",
                 id: "signup-form-email",
-                placeholder: "Email" %>
+                placeholder: "Email",
+                data: { target: "registration.email" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-envelope"></i>
               </span>
@@ -38,7 +123,8 @@
               <%= f.text_field :phone_number,
                 class: "input is-medium",
                 id: "signup-form-phone",
-                placeholder: "Phone Number" %>
+                placeholder: "Phone Number",
+                data: { target: "registration.phone" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-phone"></i>
               </span>
@@ -81,7 +167,7 @@
           <div class="field">
             <p class="control">
               <%= f.submit "Sign up",
-                class: "button is-primary is-rounded is-medium is-fullwidth",
+                class: "button is-primary is-rounded is-fullwidth",
                 data: { disable_with: "Loading ..." } %>
             </p>
           </div>
@@ -89,8 +175,11 @@
 
         <br />
         <p class="has-text-centered">
-          By signing up, I agree to the
-          <%= link_to "terms and conditions", about_path %>
+          By signing up, you agree to the <%= link_to "Terms of Service", about_path %>
+          and <%= link_to "Privacy Policy", about_path %>, including
+          <%= link_to "Cookie Use.", about_path %> Others will be able to find
+          you by email or phone number when provided ·
+          <%= link_to "Privacy Options", about_path %>
         </p>
       </div>
     </div>
