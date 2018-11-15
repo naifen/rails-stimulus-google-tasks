@@ -73,11 +73,11 @@ RSpec.feature "User authentication", :type => :feature do
 
     expect(page).to have_selector("a", :text => "Sign up")
 
-    within("#signup-form") do
-      fill_in "signup-form-username",      :with => rand_user.username
-      fill_in "signup-form-email",         :with => rand_user.email
-      fill_in "signup-form-password",      :with => rand_user.password
-      fill_in "signup-form-password-conf", :with => rand_user.password
+    within("#signupform") do
+      fill_in "signupform-username",      :with => rand_user.username
+      fill_in "signupform-email",         :with => rand_user.email
+      fill_in "signupform-password",      :with => rand_user.password
+      fill_in "signupform-password-conf", :with => rand_user.password
       click_button "Sign up"
     end
 

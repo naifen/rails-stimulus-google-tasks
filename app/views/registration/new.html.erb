@@ -3,55 +3,52 @@
     <div class="column is-half">
       <div class="box">
         <%= form_with scope: :step1, url: "/signup/check-availability",
-          method: :get, id: "step1-form" do |f| %>
-          <div class="field">
+          method: :get, id: "step1form" do |f| %>
+          <div class="field" id="step1form-username-filed">
             <div class="control has-icons-left has-icons-right">
               <%= f.text_field :username,
-                class: "input is-medium is-success",
-                id: "step1-form-username",
+                class: "input is-medium",
+                id: "step1form-username",
                 placeholder: "Username",
                 data: { target: "registration.step1username" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-user"></i>
               </span>
-              <span class="icon is-small is-right has-text-success">
-                <i class="fas fa-check"></i>
-              </span>
+              <span class="validation-indicator icon is-small is-right"></span>
               <p class="help is-success"></p>
+              <p class="help is-danger"></p>
             </div>
           </div>
 
-          <div class="field" id="step1-form-email-filed">
+          <div class="field" id="step1form-email-filed">
             <div class="control has-icons-left has-icons-right">
               <%= f.text_field :email,
-                class: "input is-medium is-danger",
-                id: "step1-form-email",
+                class: "input is-medium",
+                id: "step1form-email",
                 placeholder: "Email",
                 data: { target: "registration.step1email" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-envelope"></i>
               </span>
-              <span class="icon is-small is-right has-text-danger">
-                <i class="fas fa-times"></i>
-              </span>
-              <p class="help is-danger">This email is invalid</p>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
             </div>
           </div>
 
-          <div class="field is-hidden" id="step1-form-phone-filed">
+          <div class="field is-hidden " id="step1form-phone-filed">
             <div class="control has-icons-left has-icons-right">
               <%= f.text_field :phone,
-                class: "input is-medium is-danger",
-                id: "step1-form-phone",
+                class: "input is-medium",
+                id: "step1form-phone",
                 placeholder: "Phone number",
                 data: { target: "registration.step1phone" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-phone"></i>
               </span>
-              <span class="icon is-small is-right has-text-danger">
-                <i class="fas fa-times"></i>
-              </span>
-              <p class="help is-danger">This phone is invalid</p>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
             </div>
           </div>
 
@@ -85,36 +82,32 @@
     <div class="column is-half">
       <div class="box">
         <%= form_with scope: :signup, url: create_signup_path,
-          id: "signup-form" do |f| %>
+          id: "signupform" do |f| %>
           <div class="field">
             <p class="control has-icons-left has-icons-right">
               <%= f.text_field :username,
-                class: "input is-medium is-success",
-                id: "signup-form-username",
+                class: "input is-medium",
+                id: "signupform-username",
                 placeholder: "Username",
                 data: { target: "registration.username" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-user"></i>
               </span>
-              <span class="icon is-small is-right has-text-success">
-                <i class="fas fa-check"></i>
-              </span>
+              <span class="icon is-small is-right"></span>
             </p>
           </div>
 
           <div class="field">
             <p class="control has-icons-left has-icons-right">
               <%= f.text_field :email,
-                class: "input is-medium is-danger",
-                id: "signup-form-email",
+                class: "input is-medium",
+                id: "signupform-email",
                 placeholder: "Email",
                 data: { target: "registration.email" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-envelope"></i>
               </span>
-              <span class="icon is-small is-right has-text-danger">
-                <i class="fas fa-exclamation-circle"></i>
-              </span>
+              <span class="icon is-small is-right"></span>
             </p>
           </div>
 
@@ -122,15 +115,13 @@
             <p class="control has-icons-left has-icons-right">
               <%= f.text_field :phone_number,
                 class: "input is-medium",
-                id: "signup-form-phone",
+                id: "signupform-phone",
                 placeholder: "Phone Number",
                 data: { target: "registration.phone" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-phone"></i>
               </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
-              </span>
+              <span class="icon is-small is-right"></span>
             </p>
           </div>
 
@@ -138,14 +129,14 @@
             <p class="control has-icons-left has-icons-right">
               <%= f.password_field :password,
                 class: "input is-medium",
-                id: "signup-form-password",
-                placeholder: "Password" %>
+                id: "signupform-password",
+                placeholder: "Password (8 characters and more)" %>
               <span class="icon is-small is-left">
                 <i class="fas fa-key"></i>
               </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
-              </span>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
             </p>
           </div>
 
@@ -153,14 +144,14 @@
             <p class="control has-icons-left has-icons-right">
               <%= f.password_field :password_confirmation,
                 class: "input is-medium",
-                id: "signup-form-password-conf",
+                id: "signupform-password-conf",
                 placeholder: "Password Confirmation" %>
               <span class="icon is-small is-left">
                 <i class="fas fa-key"></i>
               </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
-              </span>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
             </p>
           </div>
 

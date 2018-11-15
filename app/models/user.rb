@@ -73,11 +73,14 @@ class User < ApplicationRecord
   # custom validator
   validate :ensure_email_or_phone
 
+  before_save   :normalize_blank_email_phone!
   before_create :activate_user!
   before_create :approve_user!
   before_create :confirm_user!
+  before_create :normalize_blank_email_phone!
 
   # used in UserSession find_by_login_method
+  # allows signin with username, email or phone number
   def self.find_by_username_email_or_phone(login)
     find_by_username(login) || find_by_email(login) || find_by_phone_number(login)
   end
@@ -101,5 +104,10 @@ class User < ApplicationRecord
         errors.add(:email, "must be present if phone number is empty.")
         errors.add(:phone_number, "must be present if email is empty.")
       end
+    end
+
+    def normalize_blank_email_phone!
+      self.email =        nil if email.blank?
+      self.phone_number = nil if phone_number.blank?
     end
 end

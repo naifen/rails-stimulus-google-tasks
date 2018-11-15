@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   private
 
     def authenticate_user!
-      unless current_user
+      unless helpers.current_user
         store_location
         redirect_to login_path, alert: "Please log in to access this page."
         return false

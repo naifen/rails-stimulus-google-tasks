@@ -5,7 +5,7 @@ RSpec.describe "registration requests", :type => :request do
 
   it "displays the user's username after successful login" do
     get "/signup"
-    assert_select "#signup-form" do
+    assert_select "#signupform" do
       assert_select "input[name=?]", "signup[username]"
       assert_select "input[name=?]", "signup[email]"
       assert_select "input[name=?]", "signup[phone_number]"
