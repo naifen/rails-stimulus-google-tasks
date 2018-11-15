@@ -9,6 +9,8 @@ class RegistrationController extends Controller {
     "username",
     "email",
     "phone",
+    "password",
+    "pwConfirmation",
     "method"
   ];
 
@@ -20,10 +22,39 @@ class RegistrationController extends Controller {
   private usernameTarget: HTMLInputElement;
   private emailTarget: HTMLInputElement;
   private phoneTarget: HTMLInputElement;
+  private passwordTarget: HTMLInputElement;
+  private hasPasswordTarget: boolean;
+  private pwConfirmationTarget: HTMLInputElement;
+  private hasPwConfirmationTarget: boolean;
+
+  connect() {
+    if (this.hasPasswordTarget) {
+      this.passwordTarget.addEventListener("blur", this.onPasswordBlur);
+    }
+
+    if (this.hasPwConfirmationTarget) {
+      this.pwConfirmationTarget.addEventListener(
+        "blur",
+        this.onPwConfirmationBlur
+      );
+    }
+  }
+
+  disconnect() {
+    if (this.hasPasswordTarget) {
+      this.passwordTarget.removeEventListener("blur", this.onPasswordBlur);
+    }
+
+    if (this.hasPwConfirmationTarget) {
+      this.pwConfirmationTarget.removeEventListener(
+        "blur",
+        this.onPwConfirmationBlur
+      );
+    }
+  }
 
   // TODO: validation check on blur after first submit, disable button on invalid
   // TODO: add server side availability check, disable button on taken
-  // TODO: add password validation on blur
   step1Submit(e: Event) {
     e.preventDefault();
 
@@ -70,6 +101,25 @@ class RegistrationController extends Controller {
     document
       .querySelector("#step1form-phone-filed")
       .classList.toggle("is-hidden");
+  }
+
+  private onPasswordBlur(e: Event) {
+    const pwTarget = e.target as HTMLInputElement;
+    const passwordValidator = new FormValidator(pwTarget);
+    passwordValidator.validateInputFieldFor("password");
+  }
+
+  private onPwConfirmationBlur(e: Event) {
+    const pwTarget = document.querySelector(
+      "#signupform-password"
+    ) as HTMLInputElement;
+    const pwconfTarget = e.target as HTMLInputElement;
+    const passwordValidator = new FormValidator(pwconfTarget);
+
+    passwordValidator.validatePwConfirmation(
+      pwTarget.value,
+      pwconfTarget.value
+    );
   }
 }
 

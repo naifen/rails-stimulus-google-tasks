@@ -1,4 +1,5 @@
 // TODO: consider initialize with Form object or remove all explicit target parm
+// eg, new FormValidator(formHTMLElement).validateEmailField(callback)
 
 class FormValidator {
   private static unameRegexp: RegExp = /^[a-zA-Z0-9-_]+$/;
@@ -49,12 +50,22 @@ class FormValidator {
         this.handleValidationFor(
           this.target,
           FormValidator.paswdRegexp,
-          FormValidator.inValidFormatMsg,
+          `${
+            FormValidator.inValidFormatMsg
+          }, minimum 8 characters, must contain at least 1 uppercase, 1 lowercase and 1 special character from !@#$%^&*`,
           callBack
         );
         break;
       default:
         break;
+    }
+  }
+
+  validatePwConfirmation(password: string, pwConfirmation: string) {
+    if (password === pwConfirmation) {
+      this.displayValidationInfo(this.target, true);
+    } else {
+      this.displayValidationInfo(this.target, false, "must match password");
     }
   }
 
@@ -75,7 +86,7 @@ class FormValidator {
   }
 
   private validateFormat(input: string, format: RegExp): boolean {
-    return format.test(String(input).toLowerCase());
+    return format.test(String(input));
   }
 
   private displayValidationInfo(
@@ -133,7 +144,7 @@ class FormValidator {
     indicatorClass: string,
     indicatorIcon: string,
     textElement?: HTMLElement,
-    textContent: string = ""
+    textContent?: string
   ) {
     target.classList.add(targetClass);
     indicator.classList.add(indicatorClass);
