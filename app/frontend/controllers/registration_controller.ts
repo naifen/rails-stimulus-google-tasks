@@ -106,9 +106,20 @@ class RegistrationController extends Controller {
   private onPasswordBlur(e: Event) {
     const pwTarget = e.target as HTMLInputElement;
     const passwordValidator = new FormValidator(pwTarget);
-    passwordValidator.validateInputFieldFor("password");
+    const commitBtn = document
+      .querySelector("#signupform")
+      .querySelector("#commit-btn") as HTMLInputElement;
+
+    // TODO: re-enable submit button only when all condition are match
+    // password valid && password === password confirmation
+    passwordValidator.validateInputFieldFor(
+      "password",
+      () => (commitBtn.disabled = false),
+      () => (commitBtn.disabled = true)
+    );
   }
 
+  // instead of blur, detect user stopped typing with keyup and setInterval
   private onPwConfirmationBlur(e: Event) {
     const pwTarget = document.querySelector(
       "#signupform-password"

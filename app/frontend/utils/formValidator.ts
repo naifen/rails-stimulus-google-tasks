@@ -15,7 +15,11 @@ class FormValidator {
     this.target = target;
   }
 
-  validateInputFieldFor(type: string, callBack?: any) {
+  validateInputFieldFor(
+    type: string,
+    validCallBack?: any,
+    invalidCallback?: any
+  ) {
     if (this.target.value === "") {
       this.displayValidationInfo(this.target, false, "Input cannot be empty.");
       return;
@@ -27,7 +31,7 @@ class FormValidator {
           this.target,
           FormValidator.unameRegexp,
           FormValidator.inValidFormatMsg,
-          callBack
+          validCallBack
         );
         break;
       case "email":
@@ -35,7 +39,7 @@ class FormValidator {
           this.target,
           FormValidator.emailRegexp,
           FormValidator.inValidFormatMsg,
-          callBack
+          validCallBack
         );
         break;
       case "phone":
@@ -43,7 +47,7 @@ class FormValidator {
           this.target,
           FormValidator.phoneRegexp,
           FormValidator.inValidFormatMsg,
-          callBack
+          validCallBack
         );
         break;
       case "password":
@@ -53,7 +57,8 @@ class FormValidator {
           `${
             FormValidator.inValidFormatMsg
           }, minimum 8 characters, must contain at least 1 uppercase, 1 lowercase and 1 special character from !@#$%^&*`,
-          callBack
+          validCallBack,
+          invalidCallback
         );
         break;
       default:
@@ -73,14 +78,18 @@ class FormValidator {
     target: HTMLInputElement,
     regexp: RegExp,
     errorMsg: string,
-    callBack: any
+    validCallBack?: any,
+    invalidCallback?: any
   ) {
     if (!this.validateFormat(target.value, regexp)) {
       this.displayValidationInfo(target, false, errorMsg);
+      if (invalidCallback !== undefined) {
+        invalidCallback();
+      }
     } else {
       this.displayValidationInfo(target, true);
-      if (callBack !== undefined) {
-        callBack();
+      if (validCallBack !== undefined) {
+        validCallBack();
       }
     }
   }
