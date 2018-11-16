@@ -66,11 +66,29 @@ class FormValidator {
     }
   }
 
-  validatePwConfirmation(password: string, pwConfirmation: string) {
-    if (password === pwConfirmation) {
+  validatePwConfirmation(
+    password: string,
+    pwConfirmation: string,
+    validCallBack?: any,
+    invalidCallback?: any
+  ) {
+    if (
+      this.validateFormat(password, FormValidator.paswdRegexp) &&
+      password === pwConfirmation
+    ) {
       this.displayValidationInfo(this.target, true);
+      if (validCallBack !== undefined) {
+        validCallBack();
+      }
     } else {
-      this.displayValidationInfo(this.target, false, "must match password");
+      this.displayValidationInfo(
+        this.target,
+        false,
+        "invalid password format or does NOT match"
+      );
+      if (invalidCallback !== undefined) {
+        invalidCallback();
+      }
     }
   }
 

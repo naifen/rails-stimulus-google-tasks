@@ -28,6 +28,7 @@ class RegistrationController extends Controller {
   private hasPwConfirmationTarget: boolean;
 
   connect() {
+    // TODO: use data-action instead of register event listener
     if (this.hasPasswordTarget) {
       this.passwordTarget.addEventListener("blur", this.onPasswordBlur);
     }
@@ -36,6 +37,11 @@ class RegistrationController extends Controller {
       this.pwConfirmationTarget.addEventListener(
         "blur",
         this.onPwConfirmationBlur
+      );
+
+      this.pwConfirmationTarget.addEventListener(
+        "keyup",
+        this.onPwConfirmationKeyup
       );
     }
   }
@@ -49,6 +55,11 @@ class RegistrationController extends Controller {
       this.pwConfirmationTarget.removeEventListener(
         "blur",
         this.onPwConfirmationBlur
+      );
+
+      this.pwConfirmationTarget.removeEventListener(
+        "keyup",
+        this.onPwConfirmationKeyup
       );
     }
   }
@@ -119,18 +130,50 @@ class RegistrationController extends Controller {
     );
   }
 
-  // instead of blur, detect user stopped typing with keyup and setInterval
+  // TODO: DRY following Blur and Keyup functions
   private onPwConfirmationBlur(e: Event) {
     const pwTarget = document.querySelector(
       "#signupform-password"
     ) as HTMLInputElement;
     const pwconfTarget = e.target as HTMLInputElement;
     const passwordValidator = new FormValidator(pwconfTarget);
+    const commitBtn = document
+      .querySelector("#signupform")
+      .querySelector("#commit-btn") as HTMLInputElement;
 
     passwordValidator.validatePwConfirmation(
       pwTarget.value,
-      pwconfTarget.value
+      pwconfTarget.value,
+      () => (commitBtn.disabled = false),
+      () => (commitBtn.disabled = true)
     );
+  }
+
+  private onPwConfirmationKeyup(e: Event) {
+    const pwTarget = document.querySelector(
+      "#signupform-password"
+    ) as HTMLInputElement;
+    const pwconfTarget = e.target as HTMLInputElement;
+    const passwordValidator = new FormValidator(pwconfTarget);
+    const commitBtn = document
+      .querySelector("#signupform")
+      .querySelector("#commit-btn") as HTMLInputElement;
+
+    let typingTimer: any;
+    const typingInterval = 1200; // invoke setTimeout function after 2s
+
+    clearTimeout(typingTimer);
+
+    if (pwconfTarget.value) {
+      typingTimer = setTimeout(() => {
+        passwordValidator.validatePwConfirmation(
+          pwTarget.value,
+          pwconfTarget.value,
+          () => (commitBtn.disabled = false),
+          () => (commitBtn.disabled = true)
+        );
+      }, typingInterval);
+    }
   }
 }
 
