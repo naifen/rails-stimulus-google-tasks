@@ -11,61 +11,23 @@ class RegistrationController extends Controller {
     "phone",
     "password",
     "pwConfirmation",
+    "submit",
     "method"
   ];
 
   private step1usernameTarget: HTMLInputElement;
   private step1emailTarget: HTMLInputElement;
   private step1phoneTarget: HTMLInputElement;
-  private methodTarget: HTMLElement;
-
   private usernameTarget: HTMLInputElement;
   private emailTarget: HTMLInputElement;
   private phoneTarget: HTMLInputElement;
   private passwordTarget: HTMLInputElement;
-  private hasPasswordTarget: boolean;
   private pwConfirmationTarget: HTMLInputElement;
-  private hasPwConfirmationTarget: boolean;
+  private submitTarget: HTMLInputElement;
+  private methodTarget: HTMLElement;
 
-  connect() {
-    // TODO: use data-action instead of register event listener
-    if (this.hasPasswordTarget) {
-      this.passwordTarget.addEventListener("blur", this.onPasswordBlur);
-    }
-
-    if (this.hasPwConfirmationTarget) {
-      this.pwConfirmationTarget.addEventListener(
-        "blur",
-        this.onPwConfirmationBlur
-      );
-
-      this.pwConfirmationTarget.addEventListener(
-        "keyup",
-        this.onPwConfirmationKeyup
-      );
-    }
-  }
-
-  disconnect() {
-    if (this.hasPasswordTarget) {
-      this.passwordTarget.removeEventListener("blur", this.onPasswordBlur);
-    }
-
-    if (this.hasPwConfirmationTarget) {
-      this.pwConfirmationTarget.removeEventListener(
-        "blur",
-        this.onPwConfirmationBlur
-      );
-
-      this.pwConfirmationTarget.removeEventListener(
-        "keyup",
-        this.onPwConfirmationKeyup
-      );
-    }
-  }
-
-  // TODO: validation check on blur after first submit, disable button on invalid
-  // TODO: add server side availability check, disable button on taken
+  // TODO: add server side availability check, disable button if taken
+  // need to combine with format validation nicely
   step1Submit(e: Event) {
     e.preventDefault();
 
@@ -114,66 +76,48 @@ class RegistrationController extends Controller {
       .classList.toggle("is-hidden");
   }
 
-  private onPasswordBlur(e: Event) {
-    const pwTarget = e.target as HTMLInputElement;
-    const passwordValidator = new FormValidator(pwTarget);
-    const commitBtn = document
-      .querySelector("#signupform")
-      .querySelector("#commit-btn") as HTMLInputElement;
-
-    // TODO: re-enable submit button only when all condition are match
-    // password valid && password === password confirmation
+  // TODO: re-enable submit button only when all condition are match
+  // password valid && password === password confirmation
+  // TODO: aslo add focus and keyup to password field
+  onPasswordBlur() {
+    const passwordValidator = new FormValidator(this.passwordTarget);
     passwordValidator.validateInputFieldFor(
       "password",
-      () => (commitBtn.disabled = false),
-      () => (commitBtn.disabled = true)
+      () => (this.submitTarget.disabled = false),
+      () => (this.submitTarget.disabled = true)
     );
   }
 
-  // TODO: DRY following Blur and Keyup functions
-  private onPwConfirmationBlur(e: Event) {
-    const pwTarget = document.querySelector(
-      "#signupform-password"
-    ) as HTMLInputElement;
-    const pwconfTarget = e.target as HTMLInputElement;
-    const passwordValidator = new FormValidator(pwconfTarget);
-    const commitBtn = document
-      .querySelector("#signupform")
-      .querySelector("#commit-btn") as HTMLInputElement;
-
-    passwordValidator.validatePwConfirmation(
-      pwTarget.value,
-      pwconfTarget.value,
-      () => (commitBtn.disabled = false),
-      () => (commitBtn.disabled = true)
-    );
-  }
-
-  private onPwConfirmationKeyup(e: Event) {
-    const pwTarget = document.querySelector(
-      "#signupform-password"
-    ) as HTMLInputElement;
-    const pwconfTarget = e.target as HTMLInputElement;
-    const passwordValidator = new FormValidator(pwconfTarget);
-    const commitBtn = document
-      .querySelector("#signupform")
-      .querySelector("#commit-btn") as HTMLInputElement;
-
+  onPwConfirmationKeyup() {
     let typingTimer: any;
-    const typingInterval = 1200; // invoke setTimeout function after 2s
+    const typingInterval = 1200; // invoke setTimeout function after 1.2s
 
     clearTimeout(typingTimer);
 
-    if (pwconfTarget.value) {
+    if (this.pwConfirmationTarget.value) {
       typingTimer = setTimeout(() => {
-        passwordValidator.validatePwConfirmation(
-          pwTarget.value,
-          pwconfTarget.value,
-          () => (commitBtn.disabled = false),
-          () => (commitBtn.disabled = true)
-        );
+        this.validatePwconfirmation();
       }, typingInterval);
     }
+  }
+
+  onPwConfirmationFocus() {
+    this.validatePwconfirmation();
+  }
+
+  onPwConfirmationBlur() {
+    this.validatePwconfirmation();
+  }
+
+  private validatePwconfirmation() {
+    const pwconfValidator = new FormValidator(this.pwConfirmationTarget);
+
+    pwconfValidator.validatePwConfirmation(
+      this.passwordTarget.value,
+      this.pwConfirmationTarget.value,
+      () => (this.submitTarget.disabled = false),
+      () => (this.submitTarget.disabled = true)
+    );
   }
 }
 

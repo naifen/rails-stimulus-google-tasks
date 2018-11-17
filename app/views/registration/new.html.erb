@@ -131,7 +131,8 @@
                 class: "input is-medium",
                 id: "signupform-password",
                 placeholder: "Password (min 8 characters)",
-                data: { target: "registration.password" } %>
+                data: { target: "registration.password",
+                action: "blur->registration#onPasswordBlur"} %>
               <span class="icon is-small is-left">
                 <i class="fas fa-key"></i>
               </span>
@@ -147,7 +148,10 @@
                 class: "input is-medium",
                 id: "signupform-password-conf",
                 placeholder: "Password Confirmation",
-                data: { target: "registration.pwConfirmation" } %>
+                data: { target: "registration.pwConfirmation",
+                action: "keyup->registration#onPwConfirmationKeyup
+                focus->registration#onPwConfirmationFocus
+                blur->registration#onPwConfirmationBlur" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-key"></i>
               </span>
@@ -162,7 +166,7 @@
               <%= f.submit "Sign up",
                 id: "commit-btn",
                 class: "button is-primary is-rounded is-fullwidth",
-                data: { disable_with: "Loading ..." } %>
+                data: { disable_with: "Loading ...", target: "registration.submit" } %>
             </p>
           </div>
         <% end %>
