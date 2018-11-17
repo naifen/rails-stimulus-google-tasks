@@ -78,27 +78,28 @@ class RegistrationController extends Controller {
 
   // TODO: re-enable submit button only when all condition are match
   // password valid && password === password confirmation
-  // TODO: aslo add focus and keyup to password field
-  onPasswordBlur() {
-    const passwordValidator = new FormValidator(this.passwordTarget);
-    passwordValidator.validateInputFieldFor(
-      "password",
-      () => (this.submitTarget.disabled = false),
-      () => (this.submitTarget.disabled = true)
+  // Sanario: 1, password valid -> 2, password confirmation invalid -> 3, focus back password
+  // button should still be disabled, consider do this on submit button click
+  onPasswordKeyup() {
+    this.setKeyupIntervalFor(this.passwordTarget, 1200, () =>
+      this.validatePassword()
     );
   }
 
-  onPwConfirmationKeyup() {
-    let typingTimer: any;
-    const typingInterval = 1200; // invoke setTimeout function after 1.2s
+  onPasswordBlur() {
+    this.validatePassword();
+  }
 
-    clearTimeout(typingTimer);
-
-    if (this.pwConfirmationTarget.value) {
-      typingTimer = setTimeout(() => {
-        this.validatePwconfirmation();
-      }, typingInterval);
+  onPasswordFocus() {
+    if (this.passwordTarget.value || this.pwConfirmationTarget.value) {
+      this.validatePassword();
     }
+  }
+
+  onPwConfirmationKeyup() {
+    this.setKeyupIntervalFor(this.pwConfirmationTarget, 1200, () =>
+      this.validatePwconfirmation()
+    );
   }
 
   onPwConfirmationFocus() {
@@ -107,6 +108,16 @@ class RegistrationController extends Controller {
 
   onPwConfirmationBlur() {
     this.validatePwconfirmation();
+  }
+
+  private validatePassword() {
+    const passwordValidator = new FormValidator(this.passwordTarget);
+
+    passwordValidator.validateInputFieldFor(
+      "password",
+      () => (this.submitTarget.disabled = false),
+      () => (this.submitTarget.disabled = true)
+    );
   }
 
   private validatePwconfirmation() {
@@ -118,6 +129,21 @@ class RegistrationController extends Controller {
       () => (this.submitTarget.disabled = false),
       () => (this.submitTarget.disabled = true)
     );
+  }
+
+  private setKeyupIntervalFor(
+    target: HTMLInputElement,
+    delay: number,
+    callBack: any
+  ) {
+    let typingInterval: any;
+
+    clearTimeout(typingInterval);
+    if (target.value) {
+      typingInterval = setTimeout(() => {
+        callBack();
+      }, delay); // invoke setTimeout function after 1.2s
+    }
   }
 }
 
