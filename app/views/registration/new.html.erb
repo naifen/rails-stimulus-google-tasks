@@ -75,15 +75,24 @@
           </a>
         </p>
       </div>
-    </div>
-  </div>
 
-  <div class="columns is-centered">
-    <div class="column is-half">
-      <div class="box">
+      <div class="box is-hidden">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <a class="button is-rounded" data-action="click->registration#backToStep1" >
+                <span class="icon is-small">
+                  <i class="fas fa-angle-double-left"></i>
+                </span>
+                <span>Back</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <%= form_with scope: :signup, url: create_signup_path,
           id: "signupform" do |f| %>
-          <div class="field">
+          <div class="field is-hidden">
             <div class="control has-icons-left has-icons-right">
               <%= f.text_field :username,
                 class: "input is-medium",
@@ -97,7 +106,7 @@
             </div>
           </div>
 
-          <div class="field">
+          <div class="field is-hidden">
             <div class="control has-icons-left has-icons-right">
               <%= f.text_field :email,
                 class: "input is-medium",
@@ -111,7 +120,7 @@
             </div>
           </div>
 
-          <div class="field">
+          <div class="field is-hidden">
             <div class="control has-icons-left has-icons-right">
               <%= f.text_field :phone_number,
                 class: "input is-medium",

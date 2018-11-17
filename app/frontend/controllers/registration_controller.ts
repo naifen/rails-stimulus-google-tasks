@@ -54,6 +54,13 @@ class RegistrationController extends Controller {
       });
       this.step1emailTarget.value = "";
     }
+
+    if (
+      this.step1usernameTarget.value &&
+      (this.step1emailTarget.value || this.step1phoneTarget.value)
+    ) {
+      this.toggleForms();
+    }
   }
 
   switchSignupMethod(e: Event) {
@@ -74,6 +81,10 @@ class RegistrationController extends Controller {
     document
       .querySelector("#step1form-phone-filed")
       .classList.toggle("is-hidden");
+  }
+
+  backToStep1() {
+    this.toggleForms();
   }
 
   // TODO: re-enable submit button only when all condition are match
@@ -108,6 +119,16 @@ class RegistrationController extends Controller {
 
   onPwConfirmationBlur() {
     this.validatePwconfirmation();
+  }
+
+  private toggleForms() {
+    document
+      .querySelector("#step1form")
+      .parentElement.classList.toggle("is-hidden");
+
+    document
+      .querySelector("#signupform")
+      .parentElement.classList.toggle("is-hidden");
   }
 
   private validatePassword() {
