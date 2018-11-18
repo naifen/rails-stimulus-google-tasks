@@ -45,8 +45,10 @@ end
 group :test do
   gem 'database_cleaner'
   gem 'capybara'
+  gem 'chromedriver-helper'
   gem 'faker'
   gem "nyan-cat-formatter"
+  gem 'selenium-webdriver', '~> 2.53', '>= 2.53.4'
   gem 'shoulda-matchers', '4.0.0.rc1'
 end
 

@@ -23,7 +23,11 @@ class HelloController extends Controller {
       }! From TypeScript`;
     }
 
-    window.addEventListener("keydown", this.keyDownListener, false);
+    window.addEventListener("keydown", this.keyDownListener);
+  }
+
+  disconnect() {
+    window.removeEventListener("keydown", this.keyDownListener);
   }
 
   private keyDownListener(e: KeyboardEvent): any {

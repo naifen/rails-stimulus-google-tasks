@@ -2,13 +2,11 @@
 
 A unified work space for all your favorite apps without barriers.
 
-- Ruby version
-  2.5.1
+- Ruby 2.5.1 & Rails 5.2.1
 
-- Rails version
-  5.2.1
+- Directory layout: `app/frontend` contains all frontend Javascripts and stylesheets. eg, `app/frontend/controllers` contains Stimulus.js controllers
 
-- System dependencies
+- System dependencies:
   npm >= 5.6.0
   yarn >= 1.10.1
 
@@ -22,7 +20,7 @@ A unified work space for all your favorite apps without barriers.
 
   Option 2: manually add `.ts` to extensions section in `config/webpacker.yml`
 
-  create ``config/webpack/loaders/typescript.js
+  create `config/webpack/loaders/typescript.js`
 
   ```js
   module.exports = {
@@ -68,15 +66,14 @@ A unified work space for all your favorite apps without barriers.
 - Database initialization
   `rails db:create` creates Postgres DB
 
-- Test suite setup
+- Tests & specs setup
 
-  add ``rspec-rails, factory_bot_rails, database_cleaner, faker,
-capybara, shoulda-matchers, guard-rspec`` gems to Gemfile and ``bundle
-install``
+  add `rspec-rails, factory_bot_rails, database_cleaner, faker, capybara, shoulda-matchers, guard-rspec` gems to Gemfile and `bundle install`
 
-  run ``rails generate rspec:install``
+  run `rails generate rspec:install`
 
-  add configs to ``spec/rails_helper.rb``
+  add configs to `spec/rails_helper.rb`
+
   ```ruby
   RSpec.configure do |config|
     ...
@@ -107,8 +104,9 @@ install``
   end
   ```
 
-  create a ``spec/factories`` dir and add model factories there, eg
-  ``users.rb`` Faker gem can be used directly in this file like
+  create a `spec/factories` dir and add model factories there, eg
+  `users.rb` Faker gem can be used directly in this file like
+
   ```ruby
   factory :rand_user, class: User do
     username { Faker::Internet.unique.username }
@@ -117,7 +115,8 @@ install``
   end
   ```
 
-  create a ``spec/features`` dir for capybara specs, eg:
+  create a `spec/features` dir for capybara specs, eg:
+
   ```
   RSpec.feature "User authentication", :type => :feature do
     scenario "User tries to login" do
@@ -126,12 +125,12 @@ install``
   end
   ```
 
-  remember to setup proper ``.rspec`` and ``Guardfile``
+  remember to setup proper `.rspec` and `Guardfile`
 
-  Finally, run ``bundle exec guard``
+  Finally, run `bundle exec guard`
 
-  BTW, ``bullet`` gem config located at
-``config/environment/development.rb``
+  BTW, `bullet` gem config located at
+  `config/environment/development.rb`
 
 - Services (job queues, cache servers, search engines, etc.)
 
@@ -140,4 +139,4 @@ install``
 - Roadmap
 
 - Issues
-Development: byebug no echo in foreman with pry <https://github.com/pry/pry/issues/1290#issuecomment-314532050>
+  Development: byebug no echo in foreman with pry <https://github.com/pry/pry/issues/1290#issuecomment-314532050>

@@ -5,7 +5,9 @@ RSpec.describe User, type: :model do
   let(:username_invalid_regex) { build(:user, username: Faker::Name.unique.name) }
   let(:username_too_short) { build(:user, username: 'a') }
   let(:username_too_long) { build(:user, username: 'a' * 51) }
-  let(:email_phone_blank) { build(:user, email: nil, phone_number: nil) }
+  let(:email_phone_blank) { build(:user, email: "", phone_number: "") }
+  let(:email_blank_created) { create(:user, email: "") }
+  let(:phone_number_blank_created) { create(:user, phone_number: "") }
 
   describe 'validations' do
     context 'custom validator' do
@@ -49,12 +51,22 @@ RSpec.describe User, type: :model do
       end
 
       it 'can be blank' do
-        expect(build(:user, email: nil).valid?).to be_truthy
+        expect(build(:user, email: "").valid?).to be_truthy
       end
 
       describe "uniqueness" do
         subject { build(:rand_user, email: user.email) }
         it { should validate_uniqueness_of(:email).case_insensitive }
+      end
+
+      it "convert blank email to nil before create" do
+        expect(email_blank_created.email).to be_nil
+      end
+
+      it "convert blank email to nil before save" do
+        user.email = ""
+        user.save
+        expect(user.email).to be_nil
       end
     end
 
@@ -68,12 +80,22 @@ RSpec.describe User, type: :model do
       end
 
       it 'can be blank' do
-        expect(build(:user, phone_number: nil).valid?).to be_truthy
+        expect(build(:user, phone_number: "").valid?).to be_truthy
       end
 
       describe "uniqueness" do
         subject { build(:rand_user, phone_number: user.phone_number) }
         it { should validate_uniqueness_of(:phone_number).case_insensitive }
+      end
+
+      it "convert blank phone number to nil before create" do
+        expect(phone_number_blank_created.phone_number).to be_nil
+      end
+
+      it "convert blank phone number to nil before save" do
+        user.phone_number = ""
+        user.save
+        expect(user.phone_number).to be_nil
       end
     end
   end

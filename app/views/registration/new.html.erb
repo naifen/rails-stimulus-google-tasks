@@ -1,96 +1,195 @@
-<div id="signup">
+<div id="signup" data-controller="registration">
   <div class="columns is-centered">
     <div class="column is-half">
-      <div class="box" id="signup-form">
-        <%= form_with scope: :signup, url: create_signup_path do |f| %>
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
+      <div class="box">
+        <%= form_with scope: :step1, url: "/signup/check-availability",
+          method: :get, id: "step1form" do |f| %>
+          <div class="field" id="step1form-username-filed">
+            <div class="control has-icons-left has-icons-right">
               <%= f.text_field :username,
-                class: "input is-medium is-success",
-                id: "signup-form-username",
-                placeholder: "Username" %>
+                class: "input is-medium",
+                id: "step1form-username",
+                placeholder: "Username",
+                data: { target: "registration.step1username" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-user"></i>
               </span>
-              <span class="icon is-small is-right has-text-success">
-                <i class="fas fa-check"></i>
-              </span>
-            </p>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
+            </div>
           </div>
 
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
+          <div class="field" id="step1form-email-filed">
+            <div class="control has-icons-left has-icons-right">
               <%= f.text_field :email,
-                class: "input is-medium is-danger",
-                id: "signup-form-email",
-                placeholder: "Email" %>
+                class: "input is-medium",
+                id: "step1form-email",
+                placeholder: "Email",
+                data: { target: "registration.step1email" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-envelope"></i>
               </span>
-              <span class="icon is-small is-right has-text-danger">
-                <i class="fas fa-exclamation-circle"></i>
-              </span>
-            </p>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
+            </div>
           </div>
 
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
-              <%= f.text_field :phone_number,
+          <div class="field is-hidden" id="step1form-phone-filed">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.text_field :phone,
                 class: "input is-medium",
-                id: "signup-form-phone",
-                placeholder: "Phone Number" %>
+                id: "step1form-phone",
+                placeholder: "Phone number",
+                data: { target: "registration.step1phone" } %>
               <span class="icon is-small is-left">
                 <i class="fas fa-phone"></i>
               </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
-              </span>
-            </p>
-          </div>
-
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
-              <%= f.password_field :password,
-                class: "input is-medium",
-                id: "signup-form-password",
-                placeholder: "Password" %>
-              <span class="icon is-small is-left">
-                <i class="fas fa-key"></i>
-              </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
-              </span>
-            </p>
-          </div>
-
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
-              <%= f.password_field :password_confirmation,
-                class: "input is-medium",
-                id: "signup-form-password-conf",
-                placeholder: "Password Confirmation" %>
-              <span class="icon is-small is-left">
-                <i class="fas fa-key"></i>
-              </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
-              </span>
-            </p>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
+            </div>
           </div>
 
           <div class="field">
             <p class="control">
-              <%= f.submit "Sign up",
-                class: "button is-primary is-rounded is-medium is-fullwidth",
-                data: { disable_with: "Loading ..." } %>
+              <%= f.button "Next",
+                class: "button is-primary is-rounded is-fullwidth",
+                data: { disable_with: "Loading ...",
+                action: "registration#step1Submit" } do %>
+                <span>Next</span>
+                <span class="icon is-small">
+                  <i class="fas fa-angle-double-right"></i>
+                </span>
+              <% end %>
             </p>
           </div>
         <% end %>
 
         <br />
         <p class="has-text-centered">
-          By signing up, I agree to the
-          <%= link_to "terms and conditions", about_path %>
+          <a data-action="registration#switchSignupMethod"
+            data-target="registration.method">
+            Use phone instead
+          </a>
+        </p>
+      </div>
+
+      <div class="box is-hidden">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <a class="button is-rounded" data-action="click->registration#backToStep1" >
+                <span class="icon is-small">
+                  <i class="fas fa-angle-double-left"></i>
+                </span>
+                <span>Back</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <%= form_with scope: :signup, url: create_signup_path,
+          id: "signupform" do |f| %>
+          <div class="field is-hidden">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.text_field :username,
+                class: "input is-medium",
+                id: "signupform-username",
+                placeholder: "Username",
+                data: { target: "registration.username" } %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+              <span class="icon is-small is-right"></span>
+            </div>
+          </div>
+
+          <div class="field is-hidden">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.text_field :email,
+                class: "input is-medium",
+                id: "signupform-email",
+                placeholder: "Email",
+                data: { target: "registration.email" } %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <span class="icon is-small is-right"></span>
+            </div>
+          </div>
+
+          <div class="field is-hidden">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.text_field :phone_number,
+                class: "input is-medium",
+                id: "signupform-phone",
+                placeholder: "Phone Number",
+                data: { target: "registration.phone" } %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-phone"></i>
+              </span>
+              <span class="icon is-small is-right"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.password_field :password,
+                class: "input is-medium",
+                id: "signupform-password",
+                placeholder: "Password (min 8 characters)",
+                data: { target: "registration.password",
+                        action: "keyup->registration#onPasswordKeyup
+                                 focus->registration#onPasswordFocus
+                                 blur->registration#onPasswordBlur" } %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-key"></i>
+              </span>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control has-icons-left has-icons-right">
+              <%= f.password_field :password_confirmation,
+                class: "input is-medium",
+                id: "signupform-password-conf",
+                placeholder: "Password Confirmation",
+                data: { target: "registration.pwConfirmation",
+                        action: "keyup->registration#onPwConfirmationKeyup
+                                 focus->registration#onPwConfirmationFocus
+                                 blur->registration#onPwConfirmationBlur" } %>
+              <span class="icon is-small is-left">
+                <i class="fas fa-key"></i>
+              </span>
+              <span class="validation-indicator icon is-small is-right"></span>
+              <p class="help is-success"></p>
+              <p class="help is-danger"></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <p class="control">
+              <%= f.submit "Sign up",
+                id: "commit-btn",
+                class: "button is-primary is-rounded is-fullwidth",
+                disabled: true,
+                data: { disable_with: "Loading ...", target: "registration.submit" } %>
+            </p>
+          </div>
+        <% end %>
+
+        <br />
+        <p class="has-text-centered">
+          By signing up, you agree to the <%= link_to "Terms of Service", about_path %>
+          and <%= link_to "Privacy Policy", about_path %>, including
+          <%= link_to "Cookie Use.", about_path %> Others will be able to find
+          you by email or phone number when provided ·
+          <%= link_to "Privacy Options", about_path %>
         </p>
       </div>
     </div>
