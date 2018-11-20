@@ -3,7 +3,16 @@
 require "turbolinks/redirection"
 
 class ApplicationController < ActionController::Base
+  include Pundit
   include Turbolinks::Redirection # add this line b/c turbolinks require: false
+
+  rescue_from Pundit::NotAuthorizedError, with: :handle_unauthorized_action
+
+  # Pundit will call the current_user method to retrieve what to send into user
+  # argument in policy. https://github.com/varvet/pundit#policies
+  def current_user
+    helpers.current_user
+  end
 
   # authlogic needs this CSRF protection patch, more details:
   # https://github.com/binarylogic/authlogic#2d-csrf-protection
@@ -43,5 +52,11 @@ class ApplicationController < ActionController::Base
     def redirect_back_or(default)
       redirect_to(session[:forwarding_url] || default)
       session.delete(:forwarding_url)
+    end
+
+    def handle_unauthorized_action
+      redirect_back(fallback_location: request.referrer || root_path,
+                    alert: "You are not authorized to perform this action!")
+      return false
     end
 end

@@ -27,8 +27,8 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'turbolinks', '~> 5.2.0', require: false
-
 gem 'authlogic', '~> 3.4', '>= 3.4.6'
+gem 'pundit', '~> 1.1'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -48,6 +48,7 @@ group :test do
   gem 'chromedriver-helper'
   gem 'faker'
   gem "nyan-cat-formatter"
+  gem 'pundit-matchers', '~> 1.6.0'
   gem 'selenium-webdriver', '~> 2.53', '>= 2.53.4'
   gem 'shoulda-matchers', '4.0.0.rc1'
 end

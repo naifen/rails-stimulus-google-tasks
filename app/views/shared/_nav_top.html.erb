@@ -1,8 +1,16 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
-      <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-    </a>
+    <%= image_link_to url: root_path,
+                      link_options: { class: "navbar-item" },
+                      image_src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Ruby_On_Rails_Logo.svg/1200px-Ruby_On_Rails_Logo.svg.png",
+                      image_options: { width: 73, height: 28 } %>
+
+    <a class="navbar-item"><i class="fas fa-plus"></i></a>
+
+    <%= image_link_to url: root_path,
+                      link_options: { class: "navbar-item" },
+                      image_src: "https://stimulusjs.org/images/logo-beige.svg",
+                      image_options: { width: 28, height: 28 } %>
 
     <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
       <span aria-hidden="true"></span>
@@ -13,10 +21,14 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-      <%= link_to "Home", root_path, class: "navbar-item" %>
+      <%= link_to root_path, class: "navbar-item" do %>
+        <i class="fas fa-home fa-lg"></i> &nbsp; Home
+      <% end %>
 
       <a class="navbar-item">
-        Apps
+        <%= link_to root_path, class: "navbar-item" do %>
+          <i class="fas fa-th fa-lg"></i> &nbsp; Apps
+        <% end %>
       </a>
 
       <div class="navbar-item has-dropdown is-hoverable">
@@ -25,16 +37,12 @@
         </a>
 
         <div class="navbar-dropdown">
-          <a class="navbar-item">
-            About
-          </a>
-          <a class="navbar-item">
-            Jobs
-          </a>
-          <a class="navbar-item">
-            Contact
-          </a>
+          <%= link_to "About", about_path, class: "navbar-item" %>
+
+          <%= link_to "Repo", about_path, class: "navbar-item" %>
+
           <hr class="navbar-divider">
+
           <a class="navbar-item">
             Report an issue
           </a>
@@ -43,8 +51,17 @@
     </div>
 
     <div class="navbar-end">
+      <% if current_user %>
+        <%= link_to user_path(current_user), class: "navbar-item", id: "account-icon" do %>
+          <span class="icon is-large">
+            <i class="fas fa-user-circle fa-lg"></i>
+          </span>
+        <% end %>
+      <% end %>
+
       <div class="navbar-item">
         <div class="buttons">
+
           <% unless current_user %>
             <%= link_to "Sign up", signup_path, class: "button is-primary" %>
           <% end %>
