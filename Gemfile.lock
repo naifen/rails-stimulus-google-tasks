@@ -169,6 +169,10 @@ GEM
       pry (>= 0.10.4)
     public_suffix (3.0.3)
     puma (3.12.0)
+    pundit (1.1.0)
+      activesupport (>= 3.0.0)
+    pundit-matchers (1.6.0)
+      rspec-rails (>= 3.0.0)
     rack (2.0.5)
     rack-contrib (2.1.0)
       rack (~> 2.0)
@@ -309,6 +313,8 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma (~> 3.11)
+  pundit (~> 1.1)
+  pundit-matchers (~> 1.6.0)
   rails (~> 5.2.1)
   rspec-rails (~> 3.8)
   rubocop
