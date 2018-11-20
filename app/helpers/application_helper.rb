@@ -11,7 +11,13 @@ module ApplicationHelper
     @current_user = current_user_session && current_user_session.user
   end
 
-  def notification_color flash_type
+  def image_link_to(url: "", link_options: {}, image_src: "", image_options: {})
+    link_to url, link_options do
+      image_tag image_src, image_options
+    end
+  end
+
+  def notification_color(flash_type)
     case flash_type
       when "success"
         "is-success"   # Green
@@ -22,7 +28,7 @@ module ApplicationHelper
       when "notice"
         "is-info"      # Blue
       else
-        flash_type.to_s
+        "is-#{flash_type.to_s}"
     end
   end
 end

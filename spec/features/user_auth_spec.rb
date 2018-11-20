@@ -1,5 +1,7 @@
 require "rails_helper"
 
+WAIT_DURATION = 2
+
 RSpec.feature "User authentication", :type => :feature do
   let(:user) { create(:user, active: true, approved: true, confirmed: true) }
   let(:rand_user) { build(:rand_user) }
@@ -7,7 +9,7 @@ RSpec.feature "User authentication", :type => :feature do
   scenario "User tries to login with username and password" do
     visit "/login"
 
-    expect(page).to have_selector("a", :text => "Sign up")
+    ensure_elements_before_login_on page
 
     within("#login-form") do
       fill_in "login-form-username", :with => user.username
@@ -16,17 +18,8 @@ RSpec.feature "User authentication", :type => :feature do
       click_button "Log in"
     end
 
-    expect(page).not_to have_selector("a", :text => "Sign up")
-    expect(page).to have_selector("a", :text => "Log out")
-    expect(page).to have_selector("h1", :text => "Pages#home")
-    expect(page).to have_selector(".is-info", :text => "Login successfully!")
-
-    visit "/signup" # redirect if already signin
-    expect(page).to have_selector("a", :text => "Log out")
-    expect(page).to have_selector(".is-warning", :text => "Already logged in")
-
-    visit "/login"
-    expect(page).to have_selector(".is-warning", :text => "Already logged in")
+    ensure_elements_after_login_on page
+    ensure_already_login_warning_on page
 
     click_link "Log out"
     expect(page).to have_selector(".is-info", :text => "Log out successfully, see you soon!")
@@ -35,7 +28,7 @@ RSpec.feature "User authentication", :type => :feature do
   scenario "User tries to login with email and password" do
     visit "/login"
 
-    expect(page).to have_selector("a", :text => "Sign up")
+    ensure_elements_before_login_on page
 
     within("#login-form") do
       fill_in "login-form-username", :with => user.email
@@ -44,16 +37,14 @@ RSpec.feature "User authentication", :type => :feature do
       click_button "Log in"
     end
 
-    expect(page).not_to have_selector("a", :text => "Sign up")
-    expect(page).to have_selector("a", :text => "Log out")
-    expect(page).to have_selector("h1", :text => "Pages#home")
-    expect(page).to have_selector(".is-info", :text => "Login successfully!")
+    ensure_elements_after_login_on page
+    ensure_already_login_warning_on page
   end
 
   scenario "User tries to login with phone number and password" do
     visit "/login"
 
-    expect(page).to have_selector("a", :text => "Sign up")
+    ensure_elements_before_login_on page
 
     within("#login-form") do
       fill_in "login-form-username", :with => user.phone_number
@@ -62,10 +53,8 @@ RSpec.feature "User authentication", :type => :feature do
       click_button "Log in"
     end
 
-    expect(page).not_to have_selector("a", :text => "Sign up")
-    expect(page).to have_selector("a", :text => "Log out")
-    expect(page).to have_selector("h1", :text => "Pages#home")
-    expect(page).to have_selector(".is-info", :text => "Login successfully!")
+    ensure_elements_after_login_on page
+    ensure_already_login_warning_on page
   end
 
   scenario "User tries to signup with username & email", js: true do
@@ -83,7 +72,7 @@ RSpec.feature "User authentication", :type => :feature do
     within("#signupform") do
       fill_in "signupform-password",      :with => rand_user.password
       fill_in "signupform-password-conf", :with => rand_user.password_confirmation
-      sleep 2
+      sleep WAIT_DURATION # wait for submit button to be enabled by js
       click_button "Sign up"
     end
 
@@ -108,5 +97,27 @@ RSpec.feature "User authentication", :type => :feature do
 
     # click_link "Log out"
     # expect(page).to have_selector(".is-info", :text => "Log out successfully, see you soon!")
+  end
+
+  def ensure_elements_before_login_on(page)
+    expect(page).to have_selector("a", :text => "Sign up")
+    expect(page).not_to have_selector("a#account-icon")
+  end
+
+  def ensure_elements_after_login_on(page)
+    expect(page).not_to have_selector("a", :text => "Sign up")
+    expect(page).to have_selector("a", :text => "Log out")
+    expect(page).to have_selector("div#app-main")
+    expect(page).to have_selector("a#account-icon")
+    expect(page).to have_selector(".is-info", :text => "Login successfully!")
+  end
+
+  def ensure_already_login_warning_on(page)
+    visit "/signup" # redirect if already signin
+    expect(page).to have_selector("a", :text => "Log out")
+    expect(page).to have_selector(".is-warning", :text => "Already logged in")
+
+    visit "/login"
+    expect(page).to have_selector(".is-warning", :text => "Already logged in")
   end
 end

@@ -1,6 +1,9 @@
-<h1>Editing User</h1>
+<% if policy(@user).edit? %>
+  <h1>Editing User</h1>
 
-<%= render 'form', user: @user %>
+  <% if policy(@user).update? %>
+    <%= render 'form', user: @user %>
+  <% end %>
 
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
+  <%= link_to 'Show', @user %>
+<% end %>

@@ -5,7 +5,7 @@ class UserPolicy < ApplicationPolicy
     is_current_user?
   end
 
-  def update?
+  def update? # edit? is same as update
     is_current_user?
   end
 
