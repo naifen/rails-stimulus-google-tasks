@@ -17,6 +17,25 @@ module ApplicationHelper
     end
   end
 
+  # TODO: apply this to registration and login form
+  # TODO: consider add a panel content helper for todo items similar to user show
+  def text_field_content_for(
+    form_object: nil,
+    control_class: "control has-icons-left has-icons-right",
+    left_icon_class: "fab fa-apple",
+    input_type: "",
+    input_options: {}
+  )
+    tag.div class: control_class do
+      concat yield form_object
+
+      concat tag.span (tag.i class: left_icon_class), class: "icon is-small is-left" #do
+      concat tag.span class: "validation-indicator icon is-small is-right"
+      concat tag.p class: "help is-success"
+      concat tag.p class: "help is-danger"
+    end
+  end
+
   def notification_color(flash_type)
     case flash_type
       when "success"

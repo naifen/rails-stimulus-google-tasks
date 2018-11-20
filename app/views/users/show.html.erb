@@ -1,25 +1,37 @@
-<p id="notice"><%= notice %></p>
-
 <% if policy(@user).show? %>
-  <p>
-    <strong>Email:</strong>
-    <%= @user.email %>
-  </p>
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <div class="box" id="user-profile">
+        <nav class="panel">
+          <a class="panel-block">
+            <span class="panel-icon">
+              <i class="fas fa-user" aria-hidden="true"></i>
+            </span>
+            <strong>Username:</strong>&nbsp;<%= @user.username %>
+          </a>
 
-  <p>
-    <strong>Username:</strong>
-    <%= @user.username %>
-  </p>
+          <a class="panel-block">
+            <span class="panel-icon">
+              <i class="fas fa-envelope" aria-hidden="true"></i>
+            </span>
+            <strong>Email:</strong>&nbsp;<%= @user.email %>
+          </a>
 
-  <p>
-    <strong>Phone number:</strong>
-    <%= @user.phone_number %>
-  </p>
+          <a class="panel-block">
+            <span class="panel-icon">
+              <i class="fas fa-phone" aria-hidden="true"></i>
+            </span>
+            <strong>Phone:</strong>&nbsp;<%= @user.phone_number %>
+          </a>
 
-  <p>
-    <strong>Password:</strong>
-    <%= @user.password %>
-  </p>
 
-  <%= link_to 'Edit', edit_user_path(@user) %>
+          <div class="panel-block">
+            <%= link_to 'Edit Profile',
+                        edit_user_path(@user),
+                        class: "button is-link is-outlined is-fullwidth" %>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
 <% end %>
