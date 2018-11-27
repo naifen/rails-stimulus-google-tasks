@@ -16,7 +16,7 @@ gem 'webpacker'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
+gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -29,6 +29,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'turbolinks', '~> 5.2.0', require: false
 gem 'authlogic', '~> 3.4', '>= 3.4.6'
 gem 'pundit', '~> 1.1'
+gem 'google-api-client', '~> 0.11.1'
+gem 'gcloud'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

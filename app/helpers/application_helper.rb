@@ -29,7 +29,7 @@ module ApplicationHelper
     tag.div class: control_class do
       concat yield form_object
 
-      concat tag.span (tag.i class: left_icon_class), class: "icon is-small is-left" #do
+      concat tag.span (tag.i class: left_icon_class), class: "icon is-small is-left"
       concat tag.span class: "validation-indicator icon is-small is-right"
       concat tag.p class: "help is-success"
       concat tag.p class: "help is-danger"
