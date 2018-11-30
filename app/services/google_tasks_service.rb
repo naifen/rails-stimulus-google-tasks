@@ -6,11 +6,12 @@ require 'googleauth/stores/redis_token_store'
 require 'fileutils'
 
 class GoogleTasksService
-  OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'.freeze
-  APPLICATION_NAME = 'Google Tasks API Ruby Quickstart'.freeze
-  CREDENTIALS_PATH = 'credentials.json'.freeze
-  TOKEN_PATH = 'token.yaml'.freeze
+  OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
+  APPLICATION_NAME = 'Rails Stimulus Google Tasks'
   SCOPE = Google::Apis::TasksV1::AUTH_TASKS_READONLY
+  ALREADY_AUTHORIZED = "Already authorized."
+  CREDENTIALS_KEY_PREFIX = 'g-user-credentials-json:'
+  AUTH_CODE_KEY_PREFIX = 'g-user-auth-code:'
 
   def initialize(credentials, username)
     @credentials = credentials
@@ -21,9 +22,8 @@ class GoogleTasksService
     credentials_hash = JSON.parse @credentials
     authorizer = create_authorizer_with(credentials_hash)
     credentials = authorizer.get_credentials(@username)
-
     return authorizer.get_authorization_url(base_url: OOB_URI) if credentials.nil?
-    "Already authorized."
+    ALREADY_AUTHORIZED
   end
 
   # Store auth token in selected token store(eg, redis) and return it
@@ -61,7 +61,7 @@ class GoogleTasksService
     def create_authorizer_with(credentials_hash)
       client_id = Google::Auth::ClientId.from_hash(credentials_hash)
       # TODO use setting to read production redis
-      token_store = Google::Auth::Stores::RedisTokenStore.new()
+      token_store = Google::Auth::Stores::RedisTokenStore.new(driver: :hiredis)
       Google::Auth::UserAuthorizer.new(client_id, SCOPE, token_store)
     end
 end

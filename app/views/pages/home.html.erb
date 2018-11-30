@@ -1,22 +1,25 @@
 <h1>Main app panel goes here</h1>
 
-<div id="app-main" data-controller="hello">
-  <h1 data-target="hello.output"></h1>
+<div id="app-main" data-controller="home">
+  <p>1, Enable your Google Tasks API and download the credentials.json file</p>
+  <p>2, Copy everything in the credentials.json file and paste in the text field</p>
+
+  <%= form_with scope: :google_tasks_auth,
+                url: google_tasks_generate_url_path do |f| %>
+    <%= f.text_area :credentials, data: { target: "home.credentials" } %>
+    <%= f.submit "Get authorization url",
+                  data: { disable_with: "Loading ...", action: "home#getUrlFormSubmit" } %>
+  <% end %>
+
+  <p>3, Open the following URL, choose account and allow access, copy the resulting code after authorization and paste in the text field below:</p>
+  <p>URL: <a id="auth-url" target="_blank"></a></p>
+
+  <%= form_with scope: :google_tasks_auth,
+                url: google_tasks_authorize_path do |f| %>
+    <%= f.text_field :credentials, data: { target: "home.hiddenCredentials" } %>
+    <%= f.text_field :code, data: { target: "home.code" } %>
+    <%= f.submit "Authorize",
+                  data: { disable_with: "Loading ...", action: "home#authFormSubmit" } %>
+  <% end %>
 </div>
 
-<hr />
-
-<p>1, Enable your Google Tasks API and download the credentials.json file</p>
-<p>2, Copy everything in the credentials.json file and paste in the text field</p>
-<%= form_with scope: :google_tasks_auth, url: google_tasks_generate_url_path do |form| %>
-  <%= form.text_area :credentials %>
-  <input name="commit" type="submit" value="Get authorization url" />
-<% end %>
-
-<p>3, Open the following URL, choose account and allow access, copy the resulting code after authorization and paste in the text field below:</p>
-<p>URL: <a id="auth-url" target="_blank" href=""></a></p>
-<%= form_with scope: :google_tasks_auth, url: google_tasks_authorize_path do |form| %>
-  <%= form.text_field :credentials, id: "token-form-credentials" %>
-  <%= form.text_field :token %>
-  <input name="commit" type="submit" value="Authorize" />
-<% end %>

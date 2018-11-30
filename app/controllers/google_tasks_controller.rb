@@ -1,46 +1,54 @@
-class GoogleTasksController < ApplicationController
-  # TODO: figure out how to create an authorizer in other actions without params
-  # before_action :auth_google_tasks, only: :index
-  before_action :authenticate_user!
+# frozen_string_literal: true
+#
+# Steps to connect to Google Tasks API:
+# 1, Enable the Google Tasks API, and download the credentials.json file.
+# 2, Copy&paste everything in credentials.json to 1st form, and generate url
+# 3, Retrive auth code from the url, paste in 2nd form and submit. Done!
 
-  # Steps:
-  # 1, enable google tasks API by creating new google project or using existing one
-  # 2, submit client_id and secret to get a auth url
-  # 3, click generated url and get auth token, submit auth token, done
+class GoogleTasksController < ApplicationController
+  before_action :authenticate_user!
+  # TODO: auth Google Tasks API in other actions
 
   def generate_url
     credentials = google_tasks_auth_params[:credentials].to_s
-    google_tasks_service = GoogleTasksService.new(credentials,
-                                                   current_user.username)
-    # url for retriving auth token which is used to store credential in redis
-    url = google_tasks_service.get_auth_url
+    gtasks_service = GoogleTasksService.new(credentials, current_user.username)
+    url = gtasks_service.get_auth_url
+    js_res = url_js_response(is_authorized: url == "Already authorized.", url: url)
+
+    # TODO show flash
     respond_to do |format|
-      format.js do
-        render js: "const target=document.querySelector('#auth-url');target.href='" +
-                   "#{url}';target.textContent='#{url}';" +
-                   "const cred=document.querySelector('#token-form-credentials');" +
-                   "cred.value='#{credentials}';"
-      end
+      format.js { render js: js_res }
     end
   end
 
   def authorize
-    # TODO: use stimulus to fill the text filed of credentials
     credentials = google_tasks_auth_params[:credentials].to_s
-    token = google_tasks_auth_params[:token].to_s
-    google_tasks_service = GoogleTasksService.new(credentials,
-                                                  current_user.username)
+    code = google_tasks_auth_params[:code].to_s
+    gtasks_service = GoogleTasksService.new(credentials, current_user.username)
+    stored_credentials = gtasks_service.get_and_store_credentials(code)
+    js_res = "console.log('please auth!')"
+    # Store credentials json and auth code in redis for later Google Tasks auth
+    if stored_credentials.present?
+      $redis.set(
+        "#{GoogleTasksService::CREDENTIALS_KEY_PREFIX}#{current_user.username}",
+        credentials
+      )
+      $redis.set(
+        "#{GoogleTasksService::AUTH_CODE_KEY_PREFIX}#{current_user.username}",
+        code
+      )
+      js_res = "console.log('Google Tasks API uccessfully authorized')"
+    end
 
-    stored_credentials = google_tasks_service.get_and_store_credentials(token)
+    # TODO show flash
     respond_to do |format|
       format.js do
-        render js: "console.log(#{stored_credentials}.to_s)"
+        render js: js_res
       end
     end
   end
 
   def index
-    # @task_lists = google_tasks_service.get_tasklists(token)
   end
 
   def new
@@ -64,6 +72,15 @@ class GoogleTasksController < ApplicationController
   private
 
     def google_tasks_auth_params
-      params.require(:google_tasks_auth).permit(:credentials, :token)
+      params.require(:google_tasks_auth).permit(:credentials, :code)
+    end
+
+    def url_js_response(is_authorized: false, url: "")
+      res = "const target=document.querySelector('#auth-url');"
+      if is_authorized
+        res += "target.textContent='#{url}';"
+      else
+        res += "target.href='#{url}';target.textContent='#{url}';"
+      end
     end
 end

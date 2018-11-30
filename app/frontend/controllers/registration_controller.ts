@@ -55,6 +55,7 @@ class RegistrationController extends Controller {
       this.step1emailTarget.value = "";
     }
 
+    // TODO: make sure fields are validate before next step
     if (
       this.step1usernameTarget.value &&
       (this.step1emailTarget.value || this.step1phoneTarget.value)
