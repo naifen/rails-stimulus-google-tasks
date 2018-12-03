@@ -13,7 +13,6 @@ class RegistrationController < ApplicationController
     respond_to do |format|
       if @user.save
         # login user after signup
-        # TODO stimulus.js close notification
         if UserSession.create @user
           format.html { redirect_to root_path, notice: 'Sign up successfully!' }
         else

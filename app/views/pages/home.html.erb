@@ -1,25 +1,52 @@
-<h1>Main app panel goes here</h1>
+<% unless current_user %>
+  <div class="content is-medium">
+    <h3>Login or signup first to view or connect your faviorte apps.</h3>
+  </div>
+<% else %>
+  <div id="auth-apps" data-controller="home">
+    <% if is_google_tasks_connected_for(current_user.username) %>
+      <div class="content is-medium">
+        <p>Google Tasks connected. <%= link_to "Visit", google_tasks_path %></p>
+      </div>
+    <% else %>
+      <div id="google-tasks" class="content is-medium">
+        <p>
+          1, Read the instructions and click the blue button on
+          <a href="https://developers.google.com/tasks/quickstart/ruby" target="_blank">
+            Enable Google Tasks API
+          </a>
+          page, download the credentials.json file.
+        </p>
 
-<div id="app-main" data-controller="home">
-  <p>1, Enable your Google Tasks API and download the credentials.json file</p>
-  <p>2, Copy everything in the credentials.json file and paste in the text field</p>
+        <p>
+          2, Copy and paste everything from the downloaded credentials.json in
+          the text area below, then click "Get authorization URL" button.
+        </p>
 
-  <%= form_with scope: :google_tasks_auth,
-                url: google_tasks_generate_url_path do |f| %>
-    <%= f.text_area :credentials, data: { target: "home.credentials" } %>
-    <%= f.submit "Get authorization url",
-                  data: { disable_with: "Loading ...", action: "home#getUrlFormSubmit" } %>
+        <%= form_with scope: :google_tasks_auth,
+                      url: google_tasks_generate_url_path do |f| %>
+          <%= f.text_area :credentials, data: { target: "home.credentials" } %>
+          <%= f.submit "Get authorization URL",
+                        data: { disable_with: "Loading ...", action: "home#getUrlFormSubmit" } %>
+        <% end %>
+
+        <p>
+          3, Open the generated URL below, choose a Google account and authorize,
+          copy the resulting code after the successful authorization, paste in
+          the text field below and click "Authorize" button:
+        </p>
+        <p>URL: <a id="auth-url" target="_blank"></a></p>
+
+        <%= form_with scope: :google_tasks_auth,
+                      url: google_tasks_authorize_path do |f| %>
+          <%= f.text_field :credentials,
+                           class: "is-hidden",
+                           data: { target: "home.hiddenCredentials" } %>
+          <%= f.text_field :auth_code, data: { target: "home.authCode" } %>
+          <%= f.submit "Authorize",
+                        data: { disable_with: "Loading ...", action: "home#authFormSubmit" } %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
-
-  <p>3, Open the following URL, choose account and allow access, copy the resulting code after authorization and paste in the text field below:</p>
-  <p>URL: <a id="auth-url" target="_blank"></a></p>
-
-  <%= form_with scope: :google_tasks_auth,
-                url: google_tasks_authorize_path do |f| %>
-    <%= f.text_field :credentials, data: { target: "home.hiddenCredentials" } %>
-    <%= f.text_field :code, data: { target: "home.code" } %>
-    <%= f.submit "Authorize",
-                  data: { disable_with: "Loading ...", action: "home#authFormSubmit" } %>
-  <% end %>
-</div>
-
+<% end %>
