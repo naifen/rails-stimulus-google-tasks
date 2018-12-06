@@ -26,101 +26,44 @@
             </div>
             <div class="message-body">
               <div class="columns is-mobile">
-                <div class="column">
-                  <figure class="image is-48x48">
-                    <img src="https://lh3.googleusercontent.com/62OzNxLonba70XxMFP3X3dsdNS9lvG2xf5TqfhYDaw9iFn5as9gVSU23ExfCLoZXkMWA=s180" alt="Google Tasks" />
-                  </figure>
-                </div>
-                <div class="column">
-                  <figure class="image is-48x48">
-                    <img class="" src="https://www.gstatic.com/images/icons/material/product/1x/gmail_64dp.png" alt="Google Tasks" />
-                  </figure>
-                </div>
-                <div class="column">
-                  <figure class="image is-48x48">
-                    <img class="" src="https://www.gstatic.com/images/branding/product/1x/calendar_64dp.png" alt="Google Calendar" />
-                  </figure>
-                </div>
-                <div class="column">
-                  <figure class="image is-48x48">
-                    <img class="" src="https://www.gstatic.com/images/icons/material/product/2x/drive_32dp.png" alt="Google Drive" />
-                  </figure>
-                </div>
-                <div class="column">
-                  <figure class="image is-48x48">
-                    <img class="" src="https://www.gstatic.com/images/icons/material/product/1x/sheets_64dp.png" alt="Google Sheet" />
-                  </figure>
-                </div>
-                <div class="column">
-                  <figure class="image is-48x48">
-                    <img class="" src="https://www.gstatic.com/images/branding/product/1x/slides_64dp.png" alt="Google Sheet" />
-                  </figure>
-                </div>
+                <% @images.each do |image| %>
+                  <div class="column">
+                    <figure class="image is-48x48">
+                      <img src="<%= image[:url] %>" alt="<%= image[:alt] %>" />
+                    </figure>
+                  </div>
+                <% end %>
               </div>
               <p>
-                TODO: move to partials & nav APPS dropdown
-                1, Use <strong>Google Tasks</strong> as example. Read the instructions and click the blue button on
+                1, Use <strong>Google Tasks</strong> as example. Read the instructions
+                and click the blue button on
                 <a href="https://developers.google.com/tasks/quickstart/ruby" target="_blank">
                   Enable Google Tasks API
                 </a>
-                page, download the credentials.json file.
+                page, choose a Google account to download the credentials.json file.
               </p>
               <br />
               <p>
                 2, Copy and paste everything from the downloaded credentials.json in
-                the text area below, then click "Get authorization URL" button.
+                the text area below, then click "Get authorization link" button.
               </p>
-              <%= form_with scope: :google_tasks_auth,
-                            url: google_tasks_generate_url_path do |f| %>
-                <div class="field">
-                  <div class="control">
-                    <%= f.text_area :credentials,
-                                    class: "textarea",
-                                    placeholder: "Copy and paste everything from the downloaded credentials.json here",
-                                    data: { target: "home.credentials" } %>
-                  </div>
-                </div>
-                <div class="field">
-                  <p class="control">
-                    <%= f.submit "Get authorization URL",
-                                 class: "button is-info is-rounded is-fullwidth",
-                                 data: { disable_with: "Loading ...",
-                                         action: "home#urlFormSubmit" } %>
-                  </p>
-                </div>
-              <% end %>
+              <br />
+
+              <%= render "googleauth_url_form" %>
+
               <br />
               <p>
-                3, Open the generated Link below, choose a Google account and allow
-                access, copy and paste the resulting code in the text field below, then
-                click the "Authorize" button:
+                3, Open the generated Link below, choose the same Google account
+                to allow access, copy and paste the authorization code into the
+                text field, click "Authorize".
               </p>
               <p id="auth-link">
                 Link:
                 <a class="has-background-warning" id="auth-url" target="_blank"></a>
               </p>
               <br />
-              <%= form_with scope: :google_tasks_auth,
-                            url: google_tasks_authorize_path do |f| %>
-                <%= f.text_field :credentials,
-                                class: "is-hidden",
-                                data: { target: "home.hiddenCredentials" } %>
-                <%= text_field_content_for(form_object: f,
-                                           left_icon_class: "fas fa-key") do |f| %>
-                  <%= f.text_field :auth_code,
-                                   class: "input",
-                                   placeholder: "Copy and paste authorization code here",
-                                   data: { target: "home.authCode" } %>
-                <% end %>
-                <div class="field">
-                  <p class="control">
-                    <%= f.submit "Authorize",
-                                 class: "button is-primary is-rounded is-fullwidth",
-                                 data: { disable_with: "Loading ...",
-                                         action: "home#authFormSubmit" } %>
-                  </p>
-                </div>
-              <% end %>
+
+              <%= render "googleauth_code_form" %>
             </div>
           </article>
         <% end %>

@@ -3,7 +3,6 @@
 require 'google/apis/tasks_v1'
 require 'googleauth'
 require 'googleauth/stores/redis_token_store'
-require 'fileutils'
 
 class GoogleTasksService
   OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'

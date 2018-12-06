@@ -1,0 +1,21 @@
+<%= form_with scope: :google_tasks_auth,
+              url: google_tasks_authorize_path do |f| %>
+  <%= f.text_field :credentials,
+                   class: "is-hidden",
+                    data: { target: "home.hiddenCredentials" } %>
+  <%= text_field_content_for(form_object: f,
+                             left_icon_class: "fas fa-key") do |f| %>
+    <%= f.text_field :auth_code,
+                      class: "input",
+                      placeholder: "Copy and paste authorization code here",
+                      data: { target: "home.authCode" } %>
+  <% end %>
+  <div class="field">
+    <p class="control">
+      <%= f.submit "Authorize",
+                    class: "button is-primary is-rounded is-fullwidth",
+                    data: { disable_with: "Loading ...",
+                            action: "home#authFormSubmit" } %>
+    </p>
+  </div>
+<% end %>
