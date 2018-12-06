@@ -62,7 +62,7 @@ RSpec.feature "User authentication", :type => :feature do
 
     expect(page).to have_selector("a", :text => "Sign up") # Sign up button in nav
 
-    expect(page).to have_selector("button", :text => "Next")
+    expect(page).to have_selector("input[value='Next']")
     within("#step1form") do
       fill_in "step1form-username",      :with => rand_user.username
       fill_in "step1form-email",         :with => rand_user.email

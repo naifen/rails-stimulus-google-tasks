@@ -140,3 +140,7 @@ A unified work space for all your favorite apps without barriers.
 
 - Issues
   Development: byebug no echo in foreman with pry <https://github.com/pry/pry/issues/1290#issuecomment-314532050>
+
+  Rspec js driver issue in ``spec/features/user_auth_spec.rb``
+
+  Spec for connect APIs of other services

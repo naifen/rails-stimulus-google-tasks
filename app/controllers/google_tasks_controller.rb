@@ -16,8 +16,6 @@ class GoogleTasksController < ApplicationController
     url = gtasks_service.get_auth_url
     js_res = url_js_res(is_authorized: url == GoogleTasksService::ALREADY_AUTHORIZED,
                         url: url)
-
-    # TODO show flash
     respond_to do |format|
       format.js { render js: js_res }
     end
@@ -29,20 +27,26 @@ class GoogleTasksController < ApplicationController
     username = current_user.username
     gtasks_service = GoogleTasksService.new(credentials, username)
     stored_credentials = gtasks_service.get_and_store_credentials(code)
-    js_res = "console.log('please auth!')"
-    # Store credentials json and auth code in redis for later Google Tasks auth
-    if stored_credentials.present?
-      $redis.set("#{GoogleTasksService::CREDENTIALS_KEY_PREFIX}#{username}",
-                 credentials)
-      $redis.set("#{GoogleTasksService::AUTH_CODE_KEY_PREFIX}#{username}",
-                 code)
-      js_res = "console.log('Google Tasks API uccessfully authorized')"
-    end
+    res_content = "Something went wrong, please try again."
 
-    # TODO redirect to google tasks path for success, ajax flash for fail
+    # Store credentials json and auth code in redis for later Google Tasks auth
     respond_to do |format|
-      format.js do
-        render js: js_res
+      if stored_credentials.present?
+        begin
+          $redis.set("#{GoogleTasksService::CREDENTIALS_KEY_PREFIX}#{username}",
+                    credentials)
+          $redis.set("#{GoogleTasksService::AUTH_CODE_KEY_PREFIX}#{username}",
+                    code)
+        rescue StandardError => e
+          puts e.inspect #TODO clean up, using flash.now and partial?
+          format.js { render js: notification_for(res_content) }
+        else
+          res_content = "Google Tasks successfully connected."
+          format.html { redirect_to google_tasks_path,
+                                    flash: { success: res_content } }
+        end
+      else
+        format.js { render js: notification_for(res_content) }
       end
     end
   end
@@ -75,12 +79,10 @@ class GoogleTasksController < ApplicationController
     end
 
     def url_js_res(is_authorized: false, url: "")
-      res = "const target=document.querySelector('#auth-url');"
-      if is_authorized
-        res += "target.textContent='#{url}';"
-      else
-        res += "target.href='#{url}';target.textContent='#{url}';"
-      end
+      res = is_authorized ?
+            "target.textContent='#{url}';" :
+            "target.href='#{url}';target.textContent='Get the authorization code';"
+      "const target=document.querySelector('#auth-url');" + res
     end
 
     def ensure_not_connected
@@ -97,5 +99,14 @@ class GoogleTasksController < ApplicationController
                     notice: "Please connect your Google Tasks Service first."
         return false
       end
+    end
+
+    # TODO: move to helper?
+    def notification_for(content)
+      'const nav = document.querySelector("nav");' +
+        'const div = document.createElement("div");' +
+        'div.className = "notification-top-right notification is-danger";' +
+        "div.innerHTML = '<button class=\"delete\"></button>#{content}';" +
+        'document.body.insertBefore(div, nav);'
     end
 end

@@ -2,6 +2,7 @@
 
 class PagesController < ApplicationController
   def home
+    # TODO: move icon urls here as a array of hash
   end
 
   def about
