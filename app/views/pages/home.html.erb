@@ -1,5 +1,83 @@
-<h1>Main app panel goes here</h1>
+<% unless current_user %>
+  <div class="content is-medium">
+    <h3>Login or signup first to view or connect your faviorte apps.</h3>
+  </div>
+<% else %>
+  <div id="auth-apps" data-controller="home">
+    <div class="columns">
+      <div class="column is-half">
+        <% if is_google_tasks_connected_for(current_user.username) %>
+          <article class="message is-success" id="google-tasks-auth">
+            <div class="message-header">
+              <p>Google APIs successfully connected!</p>
+              <button class="delete" aria-label="delete"></button>
+            </div>
+            <div class="message-body">
+              <%= link_to "Go to Google Tasks page",
+                          google_tasks_path,
+                          class: "has-text-success" %>
+            </div>
+          </article>
+        <% else %>
+          <article class="message is-link" id="google-tasks-auth">
+            <div class="message-header">
+              <p>Connect with Google APIs</p>
+              <button class="delete" aria-label="delete"></button>
+            </div>
+            <div class="message-body">
+              <div class="columns is-mobile">
+                <% @images.each do |image| %>
+                  <div class="column">
+                    <figure class="image is-48x48">
+                      <img src="<%= image[:url] %>" alt="<%= image[:alt] %>" />
+                    </figure>
+                  </div>
+                <% end %>
+              </div>
+              <p>
+                1, Use <strong>Google Tasks</strong> as example. Read the instructions
+                and click the blue button on
+                <a href="https://developers.google.com/tasks/quickstart/ruby" target="_blank">
+                  Enable Google Tasks API
+                </a>
+                page, choose a Google account to download the credentials.json file.
+              </p>
+              <br />
+              <p>
+                2, Copy and paste everything from the downloaded credentials.json in
+                the text area below, then click "Get authorization link" button.
+              </p>
+              <br />
 
-<div id="app-main" data-controller="hello">
-  <h1 data-target="hello.output"></h1>
-</div>
+              <%= render "googleauth_url_form" %>
+
+              <br />
+              <p>
+                3, Open the generated Link below, choose the same Google account
+                to allow access, copy and paste the authorization code into the
+                text field, click "Authorize".
+              </p>
+              <p id="auth-link">
+                Link:
+                <a class="has-background-warning" id="auth-url" target="_blank"></a>
+              </p>
+              <br />
+
+              <%= render "googleauth_code_form" %>
+            </div>
+          </article>
+        <% end %>
+      </div>
+      <div class="column is-half">
+        <article class="message is-dark">
+          <div class="message-header">
+            <p>More integrations...</p>
+            <button class="delete" aria-label="delete"></button>
+          </div>
+          <div class="message-body">
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+<% end %>

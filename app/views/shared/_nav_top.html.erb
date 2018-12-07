@@ -25,11 +25,21 @@
         <i class="fas fa-home fa-lg"></i> &nbsp; Home
       <% end %>
 
-      <a class="navbar-item">
-        <%= link_to root_path, class: "navbar-item" do %>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
           <i class="fas fa-th fa-lg"></i> &nbsp; Apps
-        <% end %>
-      </a>
+        </a>
+
+        <div class="navbar-dropdown">
+          <%= link_to "Google Tasks", google_tasks_path, class: "navbar-item" %>
+
+          <hr class="navbar-divider">
+
+          <a class="navbar-item">
+            More
+          </a>
+        </div>
+      </div>
 
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">

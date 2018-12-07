@@ -1,0 +1,19 @@
+<%= form_with scope: :google_tasks_auth,
+              url: google_tasks_generate_url_path do |f| %>
+  <div class="field">
+    <div class="control">
+      <%= f.text_area :credentials,
+                      class: "textarea",
+                      placeholder: "Copy and paste everything from the downloaded credentials.json here",
+                      data: { target: "home.credentials" } %>
+    </div>
+  </div>
+  <div class="field">
+    <p class="control">
+      <%= f.submit "Get authorization link",
+                    class: "button is-info is-rounded is-fullwidth",
+                    data: { disable_with: "Loading ...",
+                            action: "home#urlFormSubmit" } %>
+    </p>
+  </div>
+<% end %>

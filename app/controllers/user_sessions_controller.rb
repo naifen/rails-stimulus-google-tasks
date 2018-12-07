@@ -20,9 +20,8 @@ class UserSessionsController < ApplicationController
       flash[:notice] = "Login successfully!"
       redirect_back_or root_path
     else
-      # flash.now[:alert] = "..."
-      # render :action => :new # or format.html { render :new } with respond_to
-      redirect_to login_path, alert: "A problem's occured while logging in, please try again."
+      redirect_to login_path,
+                  alert: "A problem's occured while logging in, please try again."
     end
   end
 
@@ -32,9 +31,7 @@ class UserSessionsController < ApplicationController
     end
   end
 
-  private
-
-  def user_session_params
+  private def user_session_params
     params.require(:user_session).permit(:username, :password, :remember_me)
   end
 end
