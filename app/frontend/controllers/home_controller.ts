@@ -8,13 +8,13 @@ class HomeController extends Controller {
   private authCodeTarget: HTMLInputElement;
 
   connect() {
-    document.body.addEventListener("ajax:success", this.xhrSuccessListener);
-    document.body.addEventListener("ajax:error", this.xhrErrorListener);
+    document.body.addEventListener("ajax:success", this.onXHRSuccess);
+    document.body.addEventListener("ajax:error", this.onXHRError);
   }
 
   disconnect() {
-    document.body.removeEventListener("ajax:success", this.xhrSuccessListener);
-    document.body.removeEventListener("ajax:error", this.xhrErrorListener);
+    document.body.removeEventListener("ajax:success", this.onXHRSuccess);
+    document.body.removeEventListener("ajax:error", this.onXHRError);
   }
 
   urlFormSubmit(e: Event) {
@@ -36,16 +36,8 @@ class HomeController extends Controller {
     }
   }
 
-  private displayNotificationFor(content: string, type: string): void {
-    const nav = document.querySelector("nav");
-    const notificationDiv = document.createElement("div");
-    notificationDiv.className = `notification-top-right notification is-${type}`;
-    notificationDiv.innerHTML = `<button class="delete"></button>${content}`;
-    document.body.insertBefore(notificationDiv, nav);
-  }
-
   // Rails-ujs event handlers, arrow function binds this to current context
-  private xhrSuccessListener = (event: CustomEvent) => {
+  private onXHRSuccess = (event: CustomEvent) => {
     const res = event.detail[0];
     if (res.display_notification) {
       this.displayNotificationFor(
@@ -58,12 +50,21 @@ class HomeController extends Controller {
     }
   };
 
-  private xhrErrorListener = () => {
+  private onXHRError = () => {
     this.displayNotificationFor(
       "Something went wrong please try again",
       "danger"
     );
   };
+
+  private displayNotificationFor(content: string, type: string): void {
+    const notificationBox = document.querySelector("#notification-box");
+    const notificationDiv = document.createElement("div");
+    notificationDiv.className = `notification-top-right notification is-${type}`;
+    notificationDiv.dataset.controller = "flash";
+    notificationDiv.innerHTML = `<button data-action="flash#close" class="delete"></button>${content}`;
+    notificationBox.append(notificationDiv);
+  }
 
   // TODO make this more generic
   private updateContentFor(

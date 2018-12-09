@@ -61,6 +61,7 @@ class GoogleTasksController < ApplicationController
   def index
   end
 
+  # TODO: delete extra views
   def create
   end
 
