@@ -46,21 +46,20 @@ class RegistrationController extends Controller {
     ) {
       emailValidator.validateInputFieldFor("email", () => {
         this.emailTarget.value = this.step1emailTarget.value;
+        this.step1phoneTarget.value = "";
       });
-      this.step1phoneTarget.value = "";
     } else {
       phoneValidator.validateInputFieldFor("phone", () => {
         this.phoneTarget.value = this.step1phoneTarget.value;
+        this.step1emailTarget.value = "";
       });
-      this.step1emailTarget.value = "";
     }
 
-    // TODO: make sure fields are validate before next step
     if (
-      this.step1usernameTarget.value &&
-      (this.step1emailTarget.value || this.step1phoneTarget.value)
+      unameValidator.isValidate &&
+      (emailValidator.isValidate || phoneValidator.isValidate)
     ) {
-      this.toggleForms();
+      setTimeout(this.toggleForms, 200);
     }
   }
 

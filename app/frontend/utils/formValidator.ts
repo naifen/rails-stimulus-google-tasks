@@ -9,6 +9,7 @@ class FormValidator {
   private static paswdRegexp: RegExp = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/;
   private static inValidFormatMsg: string = "Invalid format.";
 
+  isValidate: boolean = false;
   private target: HTMLInputElement;
 
   constructor(target: HTMLInputElement) {
@@ -31,7 +32,8 @@ class FormValidator {
           this.target,
           FormValidator.unameRegexp,
           FormValidator.inValidFormatMsg,
-          validCallBack
+          validCallBack,
+          invalidCallback
         );
         break;
       case "email":
@@ -39,7 +41,8 @@ class FormValidator {
           this.target,
           FormValidator.emailRegexp,
           FormValidator.inValidFormatMsg,
-          validCallBack
+          validCallBack,
+          invalidCallback
         );
         break;
       case "phone":
@@ -47,7 +50,8 @@ class FormValidator {
           this.target,
           FormValidator.phoneRegexp,
           FormValidator.inValidFormatMsg,
-          validCallBack
+          validCallBack,
+          invalidCallback
         );
         break;
       case "password":
@@ -98,7 +102,7 @@ class FormValidator {
     errorMsg: string,
     validCallBack?: any,
     invalidCallback?: any
-  ) {
+  ): boolean {
     if (!this.validateFormat(target.value, regexp)) {
       this.displayValidationInfo(target, false, errorMsg);
       if (invalidCallback !== undefined) {
@@ -106,10 +110,12 @@ class FormValidator {
       }
     } else {
       this.displayValidationInfo(target, true);
+      this.isValidate = true;
       if (validCallBack !== undefined) {
         validCallBack();
       }
     }
+    return this.isValidate;
   }
 
   private validateFormat(input: string, format: RegExp): boolean {

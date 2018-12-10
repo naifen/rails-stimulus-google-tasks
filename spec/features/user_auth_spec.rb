@@ -69,6 +69,8 @@ RSpec.feature "User authentication", :type => :feature do
       click_button "Next"
     end
 
+    sleep WAIT_DURATION
+
     within("#signupform") do
       fill_in "signupform-password",      :with => rand_user.password
       fill_in "signupform-password-conf", :with => rand_user.password_confirmation
