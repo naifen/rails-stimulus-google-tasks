@@ -1,5 +1,5 @@
 import { Controller } from "stimulus";
-import InputValidator from "../utils/formValidator";
+import InputValidator from "../utils/inputValidator";
 
 class RegistrationController extends Controller {
   static targets = [

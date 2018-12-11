@@ -6,7 +6,6 @@ class RegistrationController < ApplicationController
   def new
   end
 
-  # TODO: error msgs from ajax, instead of redirect
   def create
     @user = User.new(signup_params)
 
@@ -23,9 +22,10 @@ class RegistrationController < ApplicationController
           }
         end
       else
-        format.html {
-          redirect_to signup_path,
-          alert: "A problem's occured while signing up, please try again."
+        format.json {
+          render json: {
+            error_msg: "A problem's occured while signing up, please try again."
+          }.to_json
         }
       end
     end
