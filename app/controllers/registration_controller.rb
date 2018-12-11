@@ -14,11 +14,12 @@ class RegistrationController < ApplicationController
       if @user.save
         # login user after signup
         if UserSession.create @user
-          format.html { redirect_to root_path, notice: 'Sign up successfully!' }
+          format.html { redirect_to root_path,
+                        notice: 'Sign up successfully! You are now login.' }
         else
           format.html {
-            redirect_to signup_path,
-            alert: "A problem's occured while signing up, please try again."
+            redirect_to login_path,
+            alert: "A problem's occured while login, please login manually."
           }
         end
       else

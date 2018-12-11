@@ -1,7 +1,4 @@
-// TODO: consider initialize with Form object or remove all explicit target parm
-// eg, new FormValidator(formHTMLElement).validateEmailField(callback)
-
-class FormValidator {
+class InputValidator {
   private static unameRegexp: RegExp = /^[a-zA-Z0-9-_]+$/;
   private static emailRegexp: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   private static phoneRegexp: RegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -30,8 +27,8 @@ class FormValidator {
       case "username":
         this.handleValidationFor(
           this.target,
-          FormValidator.unameRegexp,
-          FormValidator.inValidFormatMsg,
+          InputValidator.unameRegexp,
+          InputValidator.inValidFormatMsg,
           validCallBack,
           invalidCallback
         );
@@ -39,8 +36,8 @@ class FormValidator {
       case "email":
         this.handleValidationFor(
           this.target,
-          FormValidator.emailRegexp,
-          FormValidator.inValidFormatMsg,
+          InputValidator.emailRegexp,
+          InputValidator.inValidFormatMsg,
           validCallBack,
           invalidCallback
         );
@@ -48,8 +45,8 @@ class FormValidator {
       case "phone":
         this.handleValidationFor(
           this.target,
-          FormValidator.phoneRegexp,
-          FormValidator.inValidFormatMsg,
+          InputValidator.phoneRegexp,
+          InputValidator.inValidFormatMsg,
           validCallBack,
           invalidCallback
         );
@@ -57,9 +54,9 @@ class FormValidator {
       case "password":
         this.handleValidationFor(
           this.target,
-          FormValidator.paswdRegexp,
+          InputValidator.paswdRegexp,
           `${
-            FormValidator.inValidFormatMsg
+            InputValidator.inValidFormatMsg
           }, minimum 8 characters, must contain at least 1 uppercase, 1 lowercase and 1 special character from !@#$%^&*`,
           validCallBack,
           invalidCallback
@@ -77,7 +74,7 @@ class FormValidator {
     invalidCallback?: any
   ) {
     if (
-      this.validateFormat(password, FormValidator.paswdRegexp) &&
+      this.validateFormat(password, InputValidator.paswdRegexp) &&
       password === pwConfirmation
     ) {
       this.displayValidationInfo(this.target, true);
@@ -128,7 +125,7 @@ class FormValidator {
     validationMsg?: string
   ) {
     const validationIndicator: HTMLElement = target.parentElement.querySelector(
-      ".validation-indicator"
+      "span.validation-indicator"
     );
     const errorTextElement: HTMLElement = target.parentElement.querySelector(
       "p.is-danger"
@@ -183,7 +180,7 @@ class FormValidator {
     indicator.classList.add(indicatorClass);
     indicator.innerHTML = indicatorIcon;
     if (textElement !== undefined) {
-      textElement.innerHTML = textContent;
+      textElement.innerHTML = textContent || InputValidator.inValidFormatMsg;
     }
   }
 
@@ -202,4 +199,4 @@ class FormValidator {
   }
 }
 
-export default FormValidator;
+export default InputValidator;

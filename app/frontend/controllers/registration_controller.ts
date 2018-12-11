@@ -1,5 +1,5 @@
 import { Controller } from "stimulus";
-import FormValidator from "../utils/formValidator";
+import InputValidator from "../utils/formValidator";
 
 class RegistrationController extends Controller {
   static targets = [
@@ -26,14 +26,14 @@ class RegistrationController extends Controller {
   private submitTarget: HTMLInputElement;
   private methodTarget: HTMLElement;
 
-  // TODO: add server side availability check, disable button if taken
-  // need to combine with format validation nicely
+  // TODO: add server side availability check, disable button if taken consider
+  // using formValidator.validateEmailField(...) over explicit input validators
   step1Submit(e: Event) {
     e.preventDefault();
 
-    const unameValidator = new FormValidator(this.step1usernameTarget);
-    const emailValidator = new FormValidator(this.step1emailTarget);
-    const phoneValidator = new FormValidator(this.step1phoneTarget);
+    const unameValidator = new InputValidator(this.step1usernameTarget);
+    const emailValidator = new InputValidator(this.step1emailTarget);
+    const phoneValidator = new InputValidator(this.step1phoneTarget);
 
     unameValidator.validateInputFieldFor("username", () => {
       this.usernameTarget.value = this.step1usernameTarget.value;
@@ -132,7 +132,7 @@ class RegistrationController extends Controller {
   }
 
   private validatePassword() {
-    const passwordValidator = new FormValidator(this.passwordTarget);
+    const passwordValidator = new InputValidator(this.passwordTarget);
 
     passwordValidator.validateInputFieldFor(
       "password",
@@ -142,7 +142,7 @@ class RegistrationController extends Controller {
   }
 
   private validatePwconfirmation() {
-    const pwconfValidator = new FormValidator(this.pwConfirmationTarget);
+    const pwconfValidator = new InputValidator(this.pwConfirmationTarget);
 
     pwconfValidator.validatePwConfirmation(
       this.passwordTarget.value,
