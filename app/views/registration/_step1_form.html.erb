@@ -1,26 +1,21 @@
 <%= form_with scope: :step1,
               url: "/signup/check-availability",
               method: :get,
-              id: "step1form" do |f| %>
+              id: "step1form" do |form| %>
   <div class="field" id="step1form-username-filed">
-    <div class="control has-icons-left has-icons-right">
+    <%= text_field_content_for(form_object: form,
+                                left_icon_class: "fas fa-user") do |f| %>
       <%= f.text_field :username,
-                       class: "input is-medium",
-                       id: "step1form-username",
-                       placeholder: "Username",
-                       data: { target: "registration.step1username" } %>
-      <span class="icon is-small is-left">
-        <i class="fas fa-user"></i>
-      </span>
-      <span class="validation-indicator icon is-small is-right"></span>
-      <p class="help is-success"></p>
-      <p class="help is-danger"></p>
-    </div>
+                        class: "input is-medium",
+                        id: "step1form-username",
+                        placeholder: "Username",
+                        data: { target: "registration.step1username" } %>
+    <% end %>
   </div>
 
   <div class="field" id="step1form-email-filed">
     <div class="control has-icons-left has-icons-right">
-      <%= f.text_field :email,
+      <%= form.text_field :email,
                        class: "input is-medium",
                        id: "step1form-email",
                        placeholder: "Email",
@@ -36,7 +31,7 @@
 
   <div class="field is-hidden" id="step1form-phone-filed">
     <div class="control has-icons-left has-icons-right">
-      <%= f.text_field :phone,
+      <%= form.text_field :phone,
                        class: "input is-medium",
                        id: "step1form-phone",
                        placeholder: "Phone number",
@@ -52,7 +47,7 @@
 
   <div class="field">
     <p class="control">
-      <%= f.submit "Next",
+      <%= form.submit "Next",
                    class: "button is-primary is-rounded is-fullwidth",
                    data: {
                      disable_with: "Loading ...",

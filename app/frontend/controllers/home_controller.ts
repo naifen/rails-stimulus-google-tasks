@@ -1,4 +1,5 @@
 import { Controller } from "stimulus";
+import FlashHelper from "../utils/flashHelper";
 
 class HomeController extends Controller {
   static targets = ["credentials", "hiddenCredentials", "authCode"];
@@ -20,7 +21,8 @@ class HomeController extends Controller {
   urlFormSubmit(e: Event) {
     if (!this.credentialsTarget.value) {
       e.preventDefault();
-      this.displayNotificationFor("Credentials cannot be empty.", "warning");
+      const flash = new FlashHelper("Credentials cannot be empty!", "warning");
+      flash.display();
     } else {
       this.hiddenCredentialsTarget.value = this.credentialsTarget.value;
     }
@@ -29,21 +31,23 @@ class HomeController extends Controller {
   authFormSubmit(e: Event) {
     if (!this.authCodeTarget.value) {
       e.preventDefault();
-      this.displayNotificationFor(
-        "Authentication code cannot be empty.",
+      const flash = new FlashHelper(
+        "Authentication code cannot be empty!",
         "warning"
       );
+      flash.display();
     }
   }
 
   // Rails-ujs event handlers, arrow function binds this to current context
   private onXHRSuccess = (event: CustomEvent) => {
     const res = event.detail[0];
-    if (res.display_notification) {
-      this.displayNotificationFor(
+    if (res.is_display_notification) {
+      const flash = new FlashHelper(
         res.notification.content,
         res.notification.type
       );
+      flash.display();
     }
     if (res.is_manipulate_dom) {
       this.updateContentFor(res.selector, res.content, res.is_authorized);
@@ -51,20 +55,12 @@ class HomeController extends Controller {
   };
 
   private onXHRError = () => {
-    this.displayNotificationFor(
+    const flash = new FlashHelper(
       "Something went wrong please try again",
       "danger"
     );
+    flash.display();
   };
-
-  private displayNotificationFor(content: string, type: string): void {
-    const notificationBox = document.querySelector("#notification-box");
-    const notificationDiv = document.createElement("div");
-    notificationDiv.className = `notification-top-right notification is-${type}`;
-    notificationDiv.dataset.controller = "flash";
-    notificationDiv.innerHTML = `<button data-action="flash#close" class="delete"></button>${content}`;
-    notificationBox.append(notificationDiv);
-  }
 
   // TODO make this more generic
   private updateContentFor(

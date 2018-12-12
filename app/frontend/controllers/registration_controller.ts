@@ -1,4 +1,5 @@
 import { Controller } from "stimulus";
+import FlashHelper from "../utils/flashHelper";
 import InputValidator from "../utils/inputValidator";
 
 class RegistrationController extends Controller {
@@ -25,6 +26,16 @@ class RegistrationController extends Controller {
   private pwConfirmationTarget: HTMLInputElement;
   private submitTarget: HTMLInputElement;
   private methodTarget: HTMLElement;
+
+  connect() {
+    document.body.addEventListener("ajax:success", this.onXHRSuccess);
+    document.body.addEventListener("ajax:error", this.onXHRError);
+  }
+
+  disconnect() {
+    document.body.removeEventListener("ajax:success", this.onXHRSuccess);
+    document.body.removeEventListener("ajax:error", this.onXHRError);
+  }
 
   // TODO: add server side availability check, disable button if taken consider
   // using formValidator.validateEmailField(...) over explicit input validators
@@ -166,6 +177,25 @@ class RegistrationController extends Controller {
       }, delay); // invoke setTimeout function after 1.2s
     }
   }
+
+  private onXHRSuccess = (event: CustomEvent) => {
+    const res = event.detail[0];
+    if (res.is_display_notification) {
+      const flash = new FlashHelper(
+        res.notification.content,
+        res.notification.type
+      );
+      flash.display();
+    }
+  };
+
+  private onXHRError = () => {
+    const flash = new FlashHelper(
+      "Something went wrong please try again",
+      "danger"
+    );
+    flash.display();
+  };
 }
 
 export default RegistrationController;

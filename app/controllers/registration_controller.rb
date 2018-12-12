@@ -11,8 +11,7 @@ class RegistrationController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        # login user after signup
-        if UserSession.create @user
+        if UserSession.create @user # login user after signup
           format.html { redirect_to root_path,
                         notice: 'Sign up successfully! You are now login.' }
         else
@@ -22,11 +21,14 @@ class RegistrationController < ApplicationController
           }
         end
       else
-        format.json {
-          render json: {
-            error_msg: "A problem's occured while signing up, please try again."
-          }.to_json
+        error_res = {
+          is_display_notification: true,
+          notification: {
+            content: @user.errors.full_messages.join(", ") || "Something went wrong",
+            type: "danger"
+          }
         }
+        format.json { render json: error_res.to_json }
       end
     end
   end

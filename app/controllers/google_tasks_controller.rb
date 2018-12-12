@@ -32,7 +32,7 @@ class GoogleTasksController < ApplicationController
     gtasks_service = GoogleTasksService.new(credentials, username)
     stored_credentials = gtasks_service.get_and_store_credentials(code)
     error_res = {
-      display_notification: true,
+      is_display_notification: true,
       notification: {
         content: "Something went wrong, please try again.",
         type: "danger"
