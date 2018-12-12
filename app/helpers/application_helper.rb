@@ -17,8 +17,6 @@ module ApplicationHelper
     end
   end
 
-  # TODO: apply this to registration and login form
-  # TODO: consider add a panel content helper for task items similar to user show
   def text_field_content_for(
     form_object: nil,
     control_class: "control has-icons-left has-icons-right",

@@ -4,7 +4,7 @@
               id: "step1form" do |form| %>
   <div class="field" id="step1form-username-filed">
     <%= text_field_content_for(form_object: form,
-                                left_icon_class: "fas fa-user") do |f| %>
+                               left_icon_class: "fas fa-user") do |f| %>
       <%= f.text_field :username,
                         class: "input is-medium",
                         id: "step1form-username",
@@ -14,45 +14,35 @@
   </div>
 
   <div class="field" id="step1form-email-filed">
-    <div class="control has-icons-left has-icons-right">
-      <%= form.text_field :email,
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-envelope") do |f| %>
+      <%= f.text_field :email,
                        class: "input is-medium",
                        id: "step1form-email",
                        placeholder: "Email",
                        data: { target: "registration.step1email" } %>
-      <span class="icon is-small is-left">
-        <i class="fas fa-envelope"></i>
-      </span>
-      <span class="validation-indicator icon is-small is-right"></span>
-      <p class="help is-success"></p>
-      <p class="help is-danger"></p>
-    </div>
+    <% end %>
   </div>
 
   <div class="field is-hidden" id="step1form-phone-filed">
-    <div class="control has-icons-left has-icons-right">
-      <%= form.text_field :phone,
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-phone") do |f| %>
+      <%= f.text_field :phone,
                        class: "input is-medium",
                        id: "step1form-phone",
                        placeholder: "Phone number",
                        data: { target: "registration.step1phone" } %>
-      <span class="icon is-small is-left">
-        <i class="fas fa-phone"></i>
-      </span>
-      <span class="validation-indicator icon is-small is-right"></span>
-      <p class="help is-success"></p>
-      <p class="help is-danger"></p>
-    </div>
+    <% end %>
   </div>
 
   <div class="field">
     <p class="control">
       <%= form.submit "Next",
-                   class: "button is-primary is-rounded is-fullwidth",
-                   data: {
-                     disable_with: "Loading ...",
-                     action: "registration#step1Submit"
-                   } do %>
+                      class: "button is-primary is-rounded is-fullwidth",
+                      data: {
+                        disable_with: "Loading ...",
+                        action: "registration#step1Submit"
+                      } do %>
         <span>Next</span>
         <span class="icon is-small">
           <i class="fas fa-angle-double-right"></i>

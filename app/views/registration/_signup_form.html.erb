@@ -1,50 +1,42 @@
 <%= form_with scope: :signup,
               url: create_signup_path,
-              id: "signupform" do |f| %>
+              id: "signupform" do |form| %>
   <div class="field is-hidden">
-    <div class="control has-icons-left has-icons-right">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-user") do |f| %>
       <%= f.text_field :username,
                        class: "input is-medium",
                        id: "signupform-username",
                        placeholder: "Username",
                        data: { target: "registration.username" } %>
-      <span class="icon is-small is-left">
-        <i class="fas fa-user"></i>
-      </span>
-      <span class="icon is-small is-right"></span>
-    </div>
+    <% end %>
   </div>
 
   <div class="field is-hidden">
-    <div class="control has-icons-left has-icons-right">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-envelope") do |f| %>
       <%= f.text_field :email,
                        class: "input is-medium",
                        id: "signupform-email",
                        placeholder: "Email",
                        data: { target: "registration.email" } %>
-      <span class="icon is-small is-left">
-        <i class="fas fa-envelope"></i>
-      </span>
-      <span class="icon is-small is-right"></span>
-    </div>
+    <% end %>
   </div>
 
   <div class="field is-hidden">
-    <div class="control has-icons-left has-icons-right">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-phone") do |f| %>
       <%= f.text_field :phone_number,
                        class: "input is-medium",
                        id: "signupform-phone",
                        placeholder: "Phone Number",
                        data: { target: "registration.phone" } %>
-      <span class="icon is-small is-left">
-        <i class="fas fa-phone"></i>
-      </span>
-      <span class="icon is-small is-right"></span>
-    </div>
+    <% end %>
   </div>
 
   <div class="field">
-    <div class="control has-icons-left has-icons-right">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-key") do |f| %>
       <%= f.password_field :password,
                            class: "input is-medium",
                            id: "signupform-password",
@@ -55,17 +47,12 @@
                                       focus->registration#onPasswordFocus
                                       blur->registration#onPasswordBlur"
                            } %>
-      <span class="icon is-small is-left">
-        <i class="fas fa-key"></i>
-      </span>
-      <span class="validation-indicator icon is-small is-right"></span>
-      <p class="help is-success"></p>
-      <p class="help is-danger"></p>
-    </div>
+    <% end %>
   </div>
 
   <div class="field">
-    <div class="control has-icons-left has-icons-right">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-key") do |f| %>
       <%= f.password_field :password_confirmation,
                            class: "input is-medium",
                            id: "signupform-password-conf",
@@ -76,25 +63,19 @@
                                       focus->registration#onPwConfirmationFocus
                                       blur->registration#onPwConfirmationBlur"
                            } %>
-      <span class="icon is-small is-left">
-        <i class="fas fa-key"></i>
-      </span>
-      <span class="validation-indicator icon is-small is-right"></span>
-      <p class="help is-success"></p>
-      <p class="help is-danger"></p>
-    </div>
+    <% end %>
   </div>
 
   <div class="field">
     <p class="control">
-      <%= f.submit "Sign up",
-                   id: "commit-btn",
-                   class: "button is-primary is-rounded is-fullwidth",
-                   disabled: true,
-                   data: {
-                     disable_with: "Loading ...",
-                     target: "registration.submit"
-                   } %>
+      <%= form.submit "Sign up",
+                      id: "commit-btn",
+                      class: "button is-primary is-rounded is-fullwidth",
+                      disabled: true,
+                      data: {
+                        disable_with: "Loading ...",
+                        target: "registration.submit"
+                      } %>
     </p>
   </div>
 <% end %>
