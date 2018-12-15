@@ -1,0 +1,53 @@
+<%= form_with scope: :step1,
+              url: "/signup/check-availability",
+              method: :get,
+              id: "step1form" do |form| %>
+  <div class="field" id="step1form-username-filed">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-user") do |f| %>
+      <%= f.text_field :username,
+                        class: "input is-medium",
+                        id: "step1form-username",
+                        placeholder: "Username",
+                        data: { target: "registration.step1username" } %>
+    <% end %>
+  </div>
+
+  <div class="field" id="step1form-email-filed">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-envelope") do |f| %>
+      <%= f.text_field :email,
+                       class: "input is-medium",
+                       id: "step1form-email",
+                       placeholder: "Email",
+                       data: { target: "registration.step1email" } %>
+    <% end %>
+  </div>
+
+  <div class="field is-hidden" id="step1form-phone-filed">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-phone") do |f| %>
+      <%= f.text_field :phone,
+                       class: "input is-medium",
+                       id: "step1form-phone",
+                       placeholder: "Phone number",
+                       data: { target: "registration.step1phone" } %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <p class="control">
+      <%= form.submit "Next",
+                      class: "button is-primary is-rounded is-fullwidth",
+                      data: {
+                        disable_with: "Loading ...",
+                        action: "registration#step1Submit"
+                      } do %>
+        <span>Next</span>
+        <span class="icon is-small">
+          <i class="fas fa-angle-double-right"></i>
+        </span>
+      <% end %>
+    </p>
+  </div>
+<% end %>

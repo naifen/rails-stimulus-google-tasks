@@ -1,5 +1,6 @@
 import { Controller } from "stimulus";
-import FormValidator from "../utils/formValidator";
+import FlashHelper from "../utils/flashHelper";
+import InputValidator from "../utils/inputValidator";
 
 class RegistrationController extends Controller {
   static targets = [
@@ -26,14 +27,24 @@ class RegistrationController extends Controller {
   private submitTarget: HTMLInputElement;
   private methodTarget: HTMLElement;
 
-  // TODO: add server side availability check, disable button if taken
-  // need to combine with format validation nicely
+  connect() {
+    document.body.addEventListener("ajax:success", this.onXHRSuccess);
+    document.body.addEventListener("ajax:error", this.onXHRError);
+  }
+
+  disconnect() {
+    document.body.removeEventListener("ajax:success", this.onXHRSuccess);
+    document.body.removeEventListener("ajax:error", this.onXHRError);
+  }
+
+  // TODO: add server side availability check, disable button if taken consider
+  // using formValidator.validateEmailField(...) over explicit input validators
   step1Submit(e: Event) {
     e.preventDefault();
 
-    const unameValidator = new FormValidator(this.step1usernameTarget);
-    const emailValidator = new FormValidator(this.step1emailTarget);
-    const phoneValidator = new FormValidator(this.step1phoneTarget);
+    const unameValidator = new InputValidator(this.step1usernameTarget);
+    const emailValidator = new InputValidator(this.step1emailTarget);
+    const phoneValidator = new InputValidator(this.step1phoneTarget);
 
     unameValidator.validateInputFieldFor("username", () => {
       this.usernameTarget.value = this.step1usernameTarget.value;
@@ -46,22 +57,20 @@ class RegistrationController extends Controller {
     ) {
       emailValidator.validateInputFieldFor("email", () => {
         this.emailTarget.value = this.step1emailTarget.value;
+        this.step1phoneTarget.value = "";
       });
-      this.step1phoneTarget.value = "";
     } else {
       phoneValidator.validateInputFieldFor("phone", () => {
         this.phoneTarget.value = this.step1phoneTarget.value;
+        this.step1emailTarget.value = "";
       });
-      this.step1emailTarget.value = "";
     }
 
-    // TODO: make sure fields are validate before next step
-    // TODO: close notification w/ stimulus.js
     if (
-      this.step1usernameTarget.value &&
-      (this.step1emailTarget.value || this.step1phoneTarget.value)
+      unameValidator.isValidate &&
+      (emailValidator.isValidate || phoneValidator.isValidate)
     ) {
-      this.toggleForms();
+      setTimeout(this.toggleForms, 200);
     }
   }
 
@@ -134,7 +143,7 @@ class RegistrationController extends Controller {
   }
 
   private validatePassword() {
-    const passwordValidator = new FormValidator(this.passwordTarget);
+    const passwordValidator = new InputValidator(this.passwordTarget);
 
     passwordValidator.validateInputFieldFor(
       "password",
@@ -144,7 +153,7 @@ class RegistrationController extends Controller {
   }
 
   private validatePwconfirmation() {
-    const pwconfValidator = new FormValidator(this.pwConfirmationTarget);
+    const pwconfValidator = new InputValidator(this.pwConfirmationTarget);
 
     pwconfValidator.validatePwConfirmation(
       this.passwordTarget.value,
@@ -168,6 +177,25 @@ class RegistrationController extends Controller {
       }, delay); // invoke setTimeout function after 1.2s
     }
   }
+
+  private onXHRSuccess = (event: CustomEvent) => {
+    const res = event.detail[0];
+    if (res.is_display_notification) {
+      const flash = new FlashHelper(
+        res.notification.content,
+        res.notification.type
+      );
+      flash.display();
+    }
+  };
+
+  private onXHRError = () => {
+    const flash = new FlashHelper(
+      "Something went wrong please try again",
+      "danger"
+    );
+    flash.display();
+  };
 }
 
 export default RegistrationController;

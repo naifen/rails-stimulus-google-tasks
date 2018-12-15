@@ -1,7 +1,4 @@
-// TODO: consider initialize with Form object or remove all explicit target parm
-// eg, new FormValidator(formHTMLElement).validateEmailField(callback)
-
-class FormValidator {
+class InputValidator {
   private static unameRegexp: RegExp = /^[a-zA-Z0-9-_]+$/;
   private static emailRegexp: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   private static phoneRegexp: RegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -9,6 +6,7 @@ class FormValidator {
   private static paswdRegexp: RegExp = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/;
   private static inValidFormatMsg: string = "Invalid format.";
 
+  isValidate: boolean = false;
   private target: HTMLInputElement;
 
   constructor(target: HTMLInputElement) {
@@ -29,33 +27,36 @@ class FormValidator {
       case "username":
         this.handleValidationFor(
           this.target,
-          FormValidator.unameRegexp,
-          FormValidator.inValidFormatMsg,
-          validCallBack
+          InputValidator.unameRegexp,
+          InputValidator.inValidFormatMsg,
+          validCallBack,
+          invalidCallback
         );
         break;
       case "email":
         this.handleValidationFor(
           this.target,
-          FormValidator.emailRegexp,
-          FormValidator.inValidFormatMsg,
-          validCallBack
+          InputValidator.emailRegexp,
+          InputValidator.inValidFormatMsg,
+          validCallBack,
+          invalidCallback
         );
         break;
       case "phone":
         this.handleValidationFor(
           this.target,
-          FormValidator.phoneRegexp,
-          FormValidator.inValidFormatMsg,
-          validCallBack
+          InputValidator.phoneRegexp,
+          InputValidator.inValidFormatMsg,
+          validCallBack,
+          invalidCallback
         );
         break;
       case "password":
         this.handleValidationFor(
           this.target,
-          FormValidator.paswdRegexp,
+          InputValidator.paswdRegexp,
           `${
-            FormValidator.inValidFormatMsg
+            InputValidator.inValidFormatMsg
           }, minimum 8 characters, must contain at least 1 uppercase, 1 lowercase and 1 special character from !@#$%^&*`,
           validCallBack,
           invalidCallback
@@ -73,7 +74,7 @@ class FormValidator {
     invalidCallback?: any
   ) {
     if (
-      this.validateFormat(password, FormValidator.paswdRegexp) &&
+      this.validateFormat(password, InputValidator.paswdRegexp) &&
       password === pwConfirmation
     ) {
       this.displayValidationInfo(this.target, true);
@@ -98,7 +99,7 @@ class FormValidator {
     errorMsg: string,
     validCallBack?: any,
     invalidCallback?: any
-  ) {
+  ): boolean {
     if (!this.validateFormat(target.value, regexp)) {
       this.displayValidationInfo(target, false, errorMsg);
       if (invalidCallback !== undefined) {
@@ -106,10 +107,12 @@ class FormValidator {
       }
     } else {
       this.displayValidationInfo(target, true);
+      this.isValidate = true;
       if (validCallBack !== undefined) {
         validCallBack();
       }
     }
+    return this.isValidate;
   }
 
   private validateFormat(input: string, format: RegExp): boolean {
@@ -122,7 +125,7 @@ class FormValidator {
     validationMsg?: string
   ) {
     const validationIndicator: HTMLElement = target.parentElement.querySelector(
-      ".validation-indicator"
+      "span.validation-indicator"
     );
     const errorTextElement: HTMLElement = target.parentElement.querySelector(
       "p.is-danger"
@@ -177,7 +180,7 @@ class FormValidator {
     indicator.classList.add(indicatorClass);
     indicator.innerHTML = indicatorIcon;
     if (textElement !== undefined) {
-      textElement.innerHTML = textContent;
+      textElement.innerHTML = textContent || InputValidator.inValidFormatMsg;
     }
   }
 
@@ -196,4 +199,4 @@ class FormValidator {
   }
 }
 
-export default FormValidator;
+export default InputValidator;

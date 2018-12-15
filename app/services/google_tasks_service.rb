@@ -57,8 +57,7 @@ class GoogleTasksService
   # @return [Google::Auth::UserAuthorizer]
   private def create_authorizer_with(credentials_hash)
     client_id = Google::Auth::ClientId.from_hash(credentials_hash)
-    # TODO use setting to read production redis
-    token_store = Google::Auth::Stores::RedisTokenStore.new(driver: :hiredis)
+    token_store = Google::Auth::Stores::RedisTokenStore.new(redis: $redis)
     Google::Auth::UserAuthorizer.new(client_id, SCOPE, token_store)
   end
 end

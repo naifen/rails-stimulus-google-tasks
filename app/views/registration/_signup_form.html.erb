@@ -1,0 +1,82 @@
+<%= form_with scope: :signup,
+              url: create_signup_path,
+              id: "signupform" do |form| %>
+  <div class="field is-hidden">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-user") do |f| %>
+      <%= f.text_field :username,
+                       class: "input is-medium",
+                       id: "signupform-username",
+                       placeholder: "Username",
+                       data: { target: "registration.username" } %>
+    <% end %>
+  </div>
+
+  <div class="field is-hidden">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-envelope") do |f| %>
+      <%= f.text_field :email,
+                       class: "input is-medium",
+                       id: "signupform-email",
+                       placeholder: "Email",
+                       data: { target: "registration.email" } %>
+    <% end %>
+  </div>
+
+  <div class="field is-hidden">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-phone") do |f| %>
+      <%= f.text_field :phone_number,
+                       class: "input is-medium",
+                       id: "signupform-phone",
+                       placeholder: "Phone Number",
+                       data: { target: "registration.phone" } %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-key") do |f| %>
+      <%= f.password_field :password,
+                           class: "input is-medium",
+                           id: "signupform-password",
+                           placeholder: "Password (min 8 characters)",
+                           data: {
+                             target: "registration.password",
+                             action: "keyup->registration#onPasswordKeyup
+                                      focus->registration#onPasswordFocus
+                                      blur->registration#onPasswordBlur"
+                           } %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= text_field_content_for(form_object: form,
+                               left_icon_class: "fas fa-key") do |f| %>
+      <%= f.password_field :password_confirmation,
+                           class: "input is-medium",
+                           id: "signupform-password-conf",
+                           placeholder: "Password Confirmation",
+                           data: {
+                             target: "registration.pwConfirmation",
+                             action: "keyup->registration#onPwConfirmationKeyup
+                                      focus->registration#onPwConfirmationFocus
+                                      blur->registration#onPwConfirmationBlur"
+                           } %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <p class="control">
+      <%= form.submit "Sign up",
+                      id: "commit-btn",
+                      class: "button is-primary is-rounded is-fullwidth",
+                      disabled: true,
+                      data: {
+                        disable_with: "Loading ...",
+                        target: "registration.submit"
+                      } %>
+    </p>
+  </div>
+<% end %>
+

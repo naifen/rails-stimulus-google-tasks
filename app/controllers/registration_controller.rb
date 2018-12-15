@@ -6,26 +6,29 @@ class RegistrationController < ApplicationController
   def new
   end
 
-  # TODO: error msgs from ajax, instead of redirect
   def create
     @user = User.new(signup_params)
 
     respond_to do |format|
       if @user.save
-        # login user after signup
-        if UserSession.create @user
-          format.html { redirect_to root_path, notice: 'Sign up successfully!' }
+        if UserSession.create @user # login user after signup
+          format.html { redirect_to root_path,
+                        notice: 'Sign up successfully! You are now login.' }
         else
           format.html {
-            redirect_to signup_path,
-            alert: "A problem's occured while signing up, please try again."
+            redirect_to login_path,
+            alert: "A problem's occured while login, please login manually."
           }
         end
       else
-        format.html {
-          redirect_to signup_path,
-          alert: "A problem's occured while signing up, please try again."
+        error_res = {
+          is_display_notification: true,
+          notification: {
+            content: @user.errors.full_messages.join(", ") || "Something went wrong",
+            type: "danger"
+          }
         }
+        format.json { render json: error_res.to_json }
       end
     end
   end

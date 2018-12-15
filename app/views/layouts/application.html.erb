@@ -12,12 +12,15 @@
   </head>
 
   <body>
-    <% flash.each do |key, value| %>
-      <div class="notification-top-right notification <%= notification_color(key) %>">
-        <button class="delete"></button>
-        <%= value %>
-      </div>
-    <% end %>
+    <div id="notification-box">
+      <% flash.each do |key, value| %>
+        <div class="notification-top-right notification <%= notification_color(key) %>"
+            data-controller="flash">
+          <button class="delete" data-action="flash#close"></button>
+          <%= value %>
+        </div>
+      <% end %>
+    </div>
 
     <%= render "shared/nav_top" %>
 

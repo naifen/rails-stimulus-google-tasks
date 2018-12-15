@@ -28,10 +28,11 @@ class GoogleTasksController < ApplicationController
   def authorize
     credentials = google_tasks_auth_params[:credentials].to_s
     code = google_tasks_auth_params[:auth_code].to_s
-    gtasks_service = GoogleTasksService.new(credentials, current_user.username)
+    username = current_user.username
+    gtasks_service = GoogleTasksService.new(credentials, username)
     stored_credentials = gtasks_service.get_and_store_credentials(code)
     error_res = {
-      display_notification: true,
+      is_display_notification: true,
       notification: {
         content: "Something went wrong, please try again.",
         type: "danger"
