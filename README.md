@@ -2,7 +2,12 @@
 
 A unified work space for all your favorite apps without barriers.
 
-- Ruby 2.5.1 & Rails 5.2.1
+- Ruby 2.6 & Rails 5.2.1
+
+- Status: WIP
+
+- TODO:
+  * CRUD google tasks after connect
 
 - Directory layout: `app/frontend` contains all frontend Javascripts and stylesheets. eg, `app/frontend/controllers` contains Stimulus.js controllers
 
