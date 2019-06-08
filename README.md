@@ -11,7 +11,7 @@ A Google Tasks web client made with rails and stimulus.js
   * Pagination
 
 - Features:
-  * Register with phone number or email using devise
+  * Register with phone number or email using authlogic, authorization using pundit
   * Connect to your google account API, store credentials in redis
   * (Google API service object in `app/services/google_tasks_services`)
   * CRUD google tasks with this web interface
