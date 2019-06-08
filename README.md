@@ -1,6 +1,6 @@
-# Workspree
+# rails-stimulus-google-tasks
 
-A unified work space for all your favorite apps without barriers.
+A Google Tasks web client made with rails and stimulus.js
 
 - Ruby 2.6 & Rails 5.2.1
 
@@ -8,6 +8,14 @@ A unified work space for all your favorite apps without barriers.
 
 - TODO:
   * CRUD google tasks after connect
+  * Pagination
+
+- Features:
+  * Register with phone number or email using devise
+  * Connect to your google account API, store credentials in redis
+  * (Google API service object in `app/services/google_tasks_services`)
+  * CRUD google tasks with this web interface
+  * Use webpack and Stimulus as frontend
 
 - Directory layout: `app/frontend` contains all frontend Javascripts and stylesheets. eg, `app/frontend/controllers` contains Stimulus.js controllers
 

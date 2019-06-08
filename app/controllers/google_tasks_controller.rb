@@ -26,11 +26,6 @@ class GoogleTasksController < ApplicationController
   end
 
   def authorize
-    credentials = google_tasks_auth_params[:credentials].to_s
-    code = google_tasks_auth_params[:auth_code].to_s
-    username = current_user.username
-    gtasks_service = GoogleTasksService.new(credentials, username)
-    stored_credentials = gtasks_service.get_and_store_credentials(code)
     error_res = {
       is_display_notification: true,
       notification: {
@@ -38,6 +33,13 @@ class GoogleTasksController < ApplicationController
         type: "danger"
       }
     } # Stimulus homeController listen to this response and display notification
+
+    credentials = google_tasks_auth_params[:credentials].to_s
+    code = google_tasks_auth_params[:auth_code].to_s
+    username = current_user.username
+    gtasks_service = GoogleTasksService.new(credentials, username)
+    stored_credentials = gtasks_service.get_and_store_credentials(code)
+
     respond_to do |format|
       if stored_credentials.present?
         begin
@@ -60,6 +62,22 @@ class GoogleTasksController < ApplicationController
   end
 
   def index
+    app_name = 'Google Tasks Rails Stimulus'.freeze
+    scope = Google::Apis::TasksV1::AUTH_TASKS_READONLY
+    username = current_user.username
+
+    credentials = $redis.get("#{GoogleTasksService::CREDENTIALS_KEY_PREFIX}#{username}")
+    code = $redis.get("#{GoogleTasksService::AUTH_CODE_KEY_PREFIX}#{username}")
+    gtasks_service = GoogleTasksService.new(credentials, username)
+    stored_credentials = gtasks_service.get_and_store_credentials(code)
+    service = Google::Apis::TasksV1::TasksService.new
+    service.client_options.application_name = app_name
+    service.authorization = stored_credentials
+
+    @task_lists = service.list_tasklists(max_results: 10)
+    @service = service # use &.each in view in case a tasklist is empty
+
+    # TODO: CRUD individual task in a popup modal Collapsable
   end
 
   def create
